@@ -33,6 +33,16 @@ class Watchlist {
       );
     });
   }
+
+  static delete(data) {
+    return new Promise((resolve, reject) => {
+      const sql = "DELETE FROM watchlist WHERE id_watchlist=?";
+      db.query(sql, data, (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      });
+    });
+  }
 }
 
 module.exports = Watchlist;

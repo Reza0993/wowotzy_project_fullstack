@@ -24,6 +24,24 @@ class WatchlistController {
       res.status(500).json({ message: "Gagal menambah data", error });
     }
   }
+
+  async delete(req, res) {
+    try {
+      const id = req.params.id;
+      const watchlist = await Watchlist.delete(id);
+      if (watchlist.affectedRows === 0) {
+        return res.status(404).json({
+          message: "Film tidak berhasil ditemukan",
+        });
+      }
+
+      res.json({
+        message: "Film berhasil dihapus ke watchlist",
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal menghapus data", error });
+    }
+  }
 }
 
 module.exports = new WatchlistController();

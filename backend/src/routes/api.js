@@ -7,5 +7,6 @@ const WatchlistController = require("../controllers/WatchlistController");
 router.get("/films", FilmController.index);
 router.get("/watchlist", WatchlistController.index);
 router.post("/watchlist", WatchlistController.store);
+router.delete("/watchlist/:id", WatchlistController.delete);
 
 module.exports = router;
