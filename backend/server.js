@@ -1,3 +1,9 @@
 const app = require("./src/app");
 
-app.listen(3000);
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`=================================`);
+  console.log(`Server PopTube Jalan di port ${PORT}`);
+  console.log(`Cek di: http://localhost:${PORT}`);
+  console.log(`=================================`);
+});

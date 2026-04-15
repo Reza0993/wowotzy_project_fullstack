@@ -1,10 +1,10 @@
-const db = require('../config/database');
+const db = require("../config/database");
 
 class Film {
   // Ambil semua film (Sesuai tugas Sprint: Test Query SELECT)
   static all() {
     return new Promise((resolve, reject) => {
-      const sql = "SELECT * FROM film";
+      const sql = "SELECT * FROM films";
       db.query(sql, (err, results) => {
         if (err) reject(err);
         resolve(results);
@@ -15,7 +15,7 @@ class Film {
   // Tambah film baru (Untuk fitur CRUD)
   static create(data) {
     return new Promise((resolve, reject) => {
-      const sql = "INSERT INTO film SET ?";
+      const sql = "INSERT INTO films SET ?";
       db.query(sql, data, (err, results) => {
         if (err) reject(err);
         resolve(results);
