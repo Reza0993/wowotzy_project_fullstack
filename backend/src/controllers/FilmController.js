@@ -9,7 +9,7 @@ class FilmController {
         data: films
       });
     } catch (error) {
-      res.status(500).json({ message: "Gagal mengambil data", error });
+      res.status(500).json({ message: "Gagal mengambil data", error: error.message });
     }
   }
 
@@ -21,7 +21,26 @@ class FilmController {
         data: film
       });
     } catch (error) {
-      res.status(500).json({ message: "Gagal menambah data", error });
+      res.status(500).json({ message: "Gagal menambah data", error: error.message });
+    }
+  }
+
+  // TAMBAHKAN FUNGSI UPDATE INI AGAR TIDAK ERROR
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const film = await Film.update(id, req.body); // Pastikan di model Film ada fungsi update
+      
+      if (!film) {
+        return res.status(404).json({ message: "Film tidak ditemukan" });
+      }
+
+      res.status(200).json({
+        message: "Film berhasil diperbarui",
+        data: film
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Gagal memperbarui data", error: error.message });
     }
   }
 }

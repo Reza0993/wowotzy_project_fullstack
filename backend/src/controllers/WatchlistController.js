@@ -9,37 +9,46 @@ class WatchlistController {
         data: watchlist,
       });
     } catch (error) {
-      res.status(500).json({ message: "Gagal mengambil data", error });
+      // Tambahkan .message agar errornya jelas
+      res.status(500).json({ message: "Gagal mengambil data", error: error.message });
     }
   }
 
   async store(req, res) {
     try {
+      // Validasi input manual tambahan (Optional jika middleware sudah ketat)
+      const { id_user, id_film } = req.body;
+      if (!id_user || !id_film) {
+        return res.status(400).json({ message: "id_user dan id_film wajib diisi" });
+      }
+
       const watchlist = await Watchlist.create(req.body);
       res.status(201).json({
         message: "Film berhasil ditambahkan ke watchlist",
         data: watchlist,
       });
     } catch (error) {
-      res.status(500).json({ message: "Gagal menambah data", error });
+      res.status(500).json({ message: "Gagal menambah data", error: error.message });
     }
   }
 
   async delete(req, res) {
     try {
       const id = req.params.id;
-      const watchlist = await Watchlist.delete(id);
-      if (watchlist.affectedRows === 0) {
+      const result = await Watchlist.delete(id);
+
+      // Cek apakah ada baris yang terhapus
+      if (result.affectedRows === 0) {
         return res.status(404).json({
-          message: "Film tidak berhasil ditemukan",
+          message: "Data watchlist tidak ditemukan",
         });
       }
 
-      res.json({
-        message: "Film berhasil dihapus ke watchlist",
+      res.status(200).json({
+        message: "Film berhasil dihapus dari watchlist",
       });
     } catch (error) {
-      res.status(500).json({ message: "Gagal menghapus data", error });
+      res.status(500).json({ message: "Gagal menghapus data", error: error.message });
     }
   }
 }
