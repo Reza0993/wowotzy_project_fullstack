@@ -1,25 +1,30 @@
-const Joi = require('joi');
-
 const validateWatchlist = (req, res, next) => {
-    const schema = Joi.object({
-        id_user: Joi.number().integer().required().messages({
-            'any.required': 'ID User harus diisi',
-            'number.base': 'ID User harus berupa angka'
-        }),
-        id_film: Joi.number().integer().required().messages({
-            'any.required': 'ID Film harus diisi',
-            'number.base': 'ID Film harus berupa angka'
-        })
-    });
+    const { id_user, id_film } = req.body;
+    const errors = [];
 
-    const { error } = schema.validate(req.body);
-    if (error) {
+    // Validasi ID User
+    if (!id_user) {
+        errors.push("ID User wajib diisi.");
+    } else if (isNaN(id_user)) {
+        errors.push("ID User harus berupa angka.");
+    }
+
+    // Validasi ID Film
+    if (!id_film) {
+        errors.push("ID Film wajib diisi.");
+    } else if (isNaN(id_film)) {
+        errors.push("ID Film harus berupa angka.");
+    }
+
+    // Jika ada error
+    if (errors.length > 0) {
         return res.status(400).json({
             status: "fail",
             message: "Validasi gagal",
-            errors: error.details[0].message // Menampilkan pesan error pertama
+            errors: errors
         });
     }
+
     next();
 };
 
