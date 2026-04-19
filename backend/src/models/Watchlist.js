@@ -4,14 +4,7 @@ class Watchlist {
   static all() {
     return new Promise((resolve, reject) => {
       const sql = `
-        SELECT 
-          w.id_watchlist,
-          role.role,
-          judul.judul,
-          w.tanggal_tambah
-        FROM watchlist w
-        JOIN users role ON w.id_user = role.id_user
-        JOIN films judul ON w.id_film = judul.id_film`;
+        SELECT * FROM watchlist`;
       db.query(sql, (err, results) => {
         if (err) reject(err);
         resolve(results);
