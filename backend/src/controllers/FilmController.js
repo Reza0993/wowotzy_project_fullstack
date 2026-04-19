@@ -16,10 +16,10 @@ class FilmController {
         .json({ message: "Gagal mengambil data", error: error.message });
     }
   }
-
+  //FUNGSI CREATE
   async store(req, res) {
     try {
-      // ✅ VALIDASI (sesuai materi: sebelum proses)
+      //VALIDASI
       const errors = validateFilm(req.body);
 
       if (errors.length > 0) {
@@ -39,24 +39,33 @@ class FilmController {
     }
   }
 
-  // TAMBAHKAN FUNGSI UPDATE INI AGAR TIDAK ERROR
+  //FUNGSI UPDATE
   async update(req, res) {
     try {
       const { id } = req.params;
-      const film = await Film.update(id, req.body); // Pastikan di model Film ada fungsi update
 
-      if (!film) {
-        return res.status(404).json({ message: "Film tidak ditemukan" });
+      if (isNaN(id)) {
+        return errorHandler(res, "ID harus berupa angka", 400);
+      }
+
+      // VALIDASI
+      const errors = validateFilm(req.body);
+      if (errors.length > 0) {
+        return errorHandler(res, errors, 400, "Validasi gagal");
+      }
+      // KIRIM id + data
+      const result = await Film.update(id, req.body);
+
+      if (result.affectedRows === 0) {
+        return errorHandler(res, "Data tidak ditemukan", 404);
       }
 
       res.status(200).json({
-        message: "Film berhasil diperbarui",
-        data: film,
+        success: true,
+        message: "Film berhasil diupdate",
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Gagal memperbarui data", error: error.message });
+      return errorHandler(res, error);
     }
   }
 }

@@ -22,6 +22,17 @@ class Film {
       });
     });
   }
+
+  //nambah update dan delete
+  static update(id, data) {
+    return new Promise((resolve, reject) => {
+      const sql = "UPDATE films SET ? WHERE id_film = ?";
+      db.query(sql, [data, id], (err, results) => {
+        if (err) return reject(err);
+        resolve(results);
+      });
+    });
+  }
 }
 
 module.exports = Film;
