@@ -5,7 +5,6 @@ const router = require("./routes/api");
 const db = require("./config/database"); // Memanggil koneksi database
 
 app.use(express.json());
-app.use(express.urlencoded);
 app.use("/api", router);
 
 module.exports = app;
