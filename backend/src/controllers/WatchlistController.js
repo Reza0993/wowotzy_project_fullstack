@@ -1,5 +1,5 @@
 const Watchlist = require("../models/Watchlist");
-const validateWatchlist = require("../utils/WatchlistValidation");
+const { validateWatchlist, validateFilm } = require("../utils/Validation");
 const errorHandler = require("../utils/errorHandler");
 
 class WatchlistController {
