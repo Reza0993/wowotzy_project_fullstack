@@ -52,4 +52,6 @@ const validateFilm = (data) => {
   return errors;
 };
 
+
+
 module.exports = { validateWatchlist, validateFilm };

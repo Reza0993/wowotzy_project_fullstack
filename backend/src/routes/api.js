@@ -23,5 +23,6 @@ router.post("/watchlist", WatchlistController.store);
 router.delete("/watchlist/:id", WatchlistController.delete);
 
 router.get("/history", HistoryController.index);
-
+router.post("/history", HistoryController.store);
+router.delete("/history/:id", HistoryController.delete);
 module.exports = router;
