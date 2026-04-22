@@ -18,7 +18,7 @@ const validateWatchlist = (data) => {
 };
 
 const validateFilm = (data) => {
-  const { judul, deskripsi, video_url, id_admin } = data;
+  const { judul, deskripsi, video_url, foto_url, id_admin } = data;
   const errors = [];
 
   // Validasi Judul
@@ -40,6 +40,10 @@ const validateFilm = (data) => {
     errors.push("Link video harus diisi.");
   }
 
+  if (!foto_url) {
+    errors.push("Link foto harus diisi.");
+  }
+
   // Validasi Rating (Jika ada input)
   if (!id_admin) {
     errors.push("id_admin tidak boleh kosong");
@@ -51,7 +55,5 @@ const validateFilm = (data) => {
 
   return errors;
 };
-
-
 
 module.exports = { validateWatchlist, validateFilm };
