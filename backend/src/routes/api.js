@@ -5,8 +5,7 @@ const router = express.Router();
 const FilmController = require("../controllers/FilmController");
 const WatchlistController = require("../controllers/WatchlistController");
 const HistoryController = require("../controllers/HistoryController");
-
-// Import Middlewares (Validation Manual)
+const CommentController = require("../controllers/CommentController");
 
 /**
  * Endpoint Film
@@ -22,7 +21,17 @@ router.get("/watchlist", WatchlistController.index);
 router.post("/watchlist", WatchlistController.store);
 router.delete("/watchlist/:id", WatchlistController.delete);
 
+/**
+ * Endpoint History
+ */
 router.get("/history", HistoryController.index);
 router.post("/history", HistoryController.store);
 router.delete("/history/:id", HistoryController.delete);
+
+/**
+ * Endpoint Comments 
+ */
+router.get("/comments/:id", CommentController.getComments);
+router.post("/comments", CommentController.addComment);
+
 module.exports = router;
