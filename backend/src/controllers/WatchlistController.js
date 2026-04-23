@@ -1,5 +1,5 @@
 const Watchlist = require("../models/Watchlist");
-const { validateWatchlist, validateFilm } = require("../utils/Validation");
+const { validate, validateFilm } = require("../utils/Validation");
 const errorHandler = require("../utils/errorHandler");
 
 class WatchlistController {
@@ -20,7 +20,7 @@ class WatchlistController {
   async store(req, res) {
     try {
       // ✅ VALIDASI (sesuai materi: sebelum proses)
-      const errors = validateWatchlist(req.body);
+      const errors = validate(req.body);
 
       if (errors.length > 0) {
         return errorHandler(res, errors, 400, "Validasi gagal");

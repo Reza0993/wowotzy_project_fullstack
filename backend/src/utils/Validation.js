@@ -1,4 +1,4 @@
-const validateWatchlist = (data) => {
+const validate = (data) => {
   const { id_user, id_film } = data;
   const errors = [];
 
@@ -56,4 +56,27 @@ const validateFilm = (data) => {
   return errors;
 };
 
-module.exports = { validateWatchlist, validateFilm };
+const validateComment = (data) => {
+  const { id_user, id_film, komentar } = data;
+  const errors = [];
+
+  if (!id_user) {
+    errors.push("ID User wajib diisi.");
+  } else if (isNaN(id_user)) {
+    errors.push("ID User harus berupa angka.");
+  }
+
+  if (!id_film) {
+    errors.push("ID Film wajib diisi.");
+  } else if (isNaN(id_film)) {
+    errors.push("ID Film harus berupa angka.");
+  }
+
+  if (!komentar) {
+    errors.push("Komentar tidak boleh kosong.");
+  }
+
+  return errors;
+};
+
+module.exports = { validate, validateFilm, validateComment };

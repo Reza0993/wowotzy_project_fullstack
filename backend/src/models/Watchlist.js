@@ -15,10 +15,10 @@ class Watchlist {
   static create(data) {
     return new Promise((resolve, reject) => {
       const sql =
-        "INSERT INTO watchlist (id_watchlist, id_user, id_film, tanggal_tambah) VALUES (?,?,?,?)";
+        "INSERT INTO watchlist (id_watchlist, id_user, id_film) VALUES (?,?,?)";
       db.query(
         sql,
-        [data.id_watchlist, data.id_user, data.id_film, data.tanggal_tambah],
+        [data.id_watchlist, data.id_user, data.id_film],
         (err, results) => {
           if (err) reject(err);
           resolve(results);

@@ -29,7 +29,7 @@ router.post("/history", HistoryController.store);
 router.delete("/history/:id", HistoryController.delete);
 
 /**
- * Endpoint Comments 
+ * Endpoint Comments
  */
 router.get("/comments/:id", CommentController.getComments);
 router.post("/comments", CommentController.addComment);
