@@ -6,6 +6,16 @@ const FilmController = require("../controllers/FilmController");
 const WatchlistController = require("../controllers/WatchlistController");
 const HistoryController = require("../controllers/HistoryController");
 const CommentController = require("../controllers/CommentController");
+const UserController = require("../controllers/UserController");
+
+/**
+ * Endpoint User (CRUD)
+ */
+router.get("/user", UserController.index);           // Get all users
+router.get("/user/:id", UserController.show);        // Get user by ID
+router.post("/user", UserController.store);          // Create new user
+router.put("/user/:id", UserController.update);      // Update user
+router.delete("/user/:id", UserController.delete);   // Delete user
 
 /**
  * Endpoint Film
