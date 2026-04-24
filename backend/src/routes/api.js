@@ -11,11 +11,11 @@ const UserController = require("../controllers/UserController");
 /**
  * Endpoint User (CRUD)
  */
-router.get("/user", UserController.index);           // Get all users
-router.get("/user/:id", UserController.show);        // Get user by ID
-router.post("/user", UserController.store);          // Create new user
-router.put("/user/:id", UserController.update);      // Update user
-router.delete("/user/:id", UserController.delete);   // Delete user
+router.get("/user", UserController.index); // Get all users
+router.get("/user/:id", UserController.show); // Get user by ID
+router.post("/user", UserController.store); // Create new user
+router.put("/user/:id", UserController.update); // Update user
+router.delete("/user/:id", UserController.delete); // Delete user
 
 /**
  * Endpoint Film
@@ -23,6 +23,7 @@ router.delete("/user/:id", UserController.delete);   // Delete user
 router.get("/film", FilmController.index);
 router.post("/film", FilmController.store);
 router.put("/film/:id", FilmController.update);
+router.delete("/film/:id", FilmController.delete);
 
 /**
  * Endpoint Watchlist

@@ -1,3 +1,5 @@
+const User = require("../models/User");
+
 const validate = (data) => {
   const { id_user, id_film } = data;
   const errors = [];
@@ -17,7 +19,7 @@ const validate = (data) => {
   return errors;
 };
 
-const validateFilm = (data) => {
+const validateFilm = async (data) => {
   const { judul, deskripsi, video_url, foto_url, id_admin } = data;
   const errors = [];
 
@@ -35,7 +37,7 @@ const validateFilm = (data) => {
     errors.push("Deskripsi minimal 10 karakter.");
   }
 
-  // Validasi video_url
+  // Validasi URL
   if (!video_url) {
     errors.push("Link video harus diisi.");
   }
@@ -44,14 +46,18 @@ const validateFilm = (data) => {
     errors.push("Link foto harus diisi.");
   }
 
-  // Validasi Rating (Jika ada input)
+  //Validasi id_admin + role
   if (!id_admin) {
     errors.push("id_admin tidak boleh kosong");
-  } //else if (user.role !== "admin") {
-  // errors.push("role id_admin harus admin ");
-  //}
+  } else {
+    const user = await User.find(id_admin); // atau sesuai query kamu
 
-  // itu yang else if harus nunggu model user dl
+    if (!user) {
+      errors.push("User tidak ditemukan");
+    } else if (user.role !== "admin") {
+      errors.push("Hanya admin yang boleh menambah film");
+    }
+  }
 
   return errors;
 };
@@ -213,12 +219,12 @@ const isValidEmail = (email) => {
 };
 
 // Export semua fungsi validasi
-module.exports = { 
-  validate, 
-  validateFilm, 
-  validateComment, 
+module.exports = {
+  validate,
+  validateFilm,
+  validateComment,
   validateUser,
   validateLogin,
   validateProfile,
-  validateChangePassword
+  validateChangePassword,
 };

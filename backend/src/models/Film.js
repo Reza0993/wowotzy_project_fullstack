@@ -33,6 +33,16 @@ class Film {
       });
     });
   }
+
+  static delete(data) {
+    return new Promise((resolve, reject) => {
+      const sql = "DELETE FROM films WHERE id_film=?";
+      db.query(sql, data, (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      });
+    });
+  }
 }
 
 module.exports = Film;

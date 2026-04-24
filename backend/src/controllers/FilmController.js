@@ -20,7 +20,7 @@ class FilmController {
   async store(req, res) {
     try {
       //VALIDASI
-      const errors = validateFilm(req.body);
+      const errors = await validateFilm(req.body);
 
       if (errors.length > 0) {
         return errorHandler(res, errors, 400, "Validasi gagal");
@@ -63,6 +63,31 @@ class FilmController {
       res.status(200).json({
         success: true,
         message: "Film berhasil diupdate",
+      });
+    } catch (error) {
+      return errorHandler(res, error);
+    }
+  }
+
+  //delete
+  async delete(req, res) {
+    try {
+      const id = req.params.id;
+
+      // Validasi sederhana
+      if (isNaN(id)) {
+        return errorHandler(res, "ID harus berupa angka", 400);
+      }
+
+      const result = await Film.delete(id);
+
+      if (result.affectedRows === 0) {
+        return errorHandler(res, "Data tidak ditemukan", 404);
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "Film berhasil dihapus",
       });
     } catch (error) {
       return errorHandler(res, error);
