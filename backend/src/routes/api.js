@@ -1,48 +1,58 @@
 const express = require("express");
 const router = express.Router();
 
-// Import Controllers
 const FilmController = require("../controllers/FilmController");
 const WatchlistController = require("../controllers/WatchlistController");
 const HistoryController = require("../controllers/HistoryController");
 const CommentController = require("../controllers/CommentController");
 const UserController = require("../controllers/UserController");
 
-/**
- * Endpoint User (CRUD)
- */
-router.get("/user", UserController.index); // Get all users
-router.get("/user/:id", UserController.show); // Get user by ID
-router.post("/user", UserController.store); // Create new user
-router.put("/user/:id", UserController.update); // Update user
-router.delete("/user/:id", UserController.delete); // Delete user
+const auth = require("../middlewares/auth");
+const authorize = require("../middlewares/authorize");
 
 /**
- * Endpoint Film
- */
+USER
+*/
+
+router.post("/login", UserController.login);
+
+router.get("/user", auth, authorize("admin"), UserController.index);
+router.get("/user/:id", auth, UserController.show);
+router.post("/user", UserController.store);
+router.put("/user/:id", auth, UserController.update);
+router.delete("/user/:id", UserController.delete);
+/**router.delete("/user/:id", auth, authorize("admin"), UserController.delete);
+
+/**
+FILM
+*/
+
 router.get("/film", FilmController.index);
-router.post("/film", FilmController.store);
-router.put("/film/:id", FilmController.update);
-router.delete("/film/:id", FilmController.delete);
+router.post("/film", auth, authorize("admin"), FilmController.store);
+router.put("/film/:id", auth, authorize("admin"), FilmController.update);
+router.delete("/film/:id", auth, authorize("admin"), FilmController.delete);
 
 /**
- * Endpoint Watchlist
- */
-router.get("/watchlist", WatchlistController.index);
-router.post("/watchlist", WatchlistController.store);
-router.delete("/watchlist/:id", WatchlistController.delete);
+WATCHLIST
+*/
+
+router.get("/watchlist", auth, WatchlistController.index);
+router.post("/watchlist", auth, WatchlistController.store);
+router.delete("/watchlist/:id", auth, WatchlistController.delete);
 
 /**
- * Endpoint History
- */
-router.get("/history", HistoryController.index);
-router.post("/history", HistoryController.store);
-router.delete("/history/:id", HistoryController.delete);
+HISTORY
+*/
+
+router.get("/history", auth, HistoryController.index);
+router.post("/history", auth, HistoryController.store);
+router.delete("/history/:id", auth, HistoryController.delete);
 
 /**
- * Endpoint Comments
- */
+COMMENTS
+*/
+
 router.get("/comments/:id", CommentController.getComments);
-router.post("/comments", CommentController.addComment);
+router.post("/comments", auth, CommentController.addComment);
 
 module.exports = router;
