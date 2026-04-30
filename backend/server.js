@@ -1,9 +1,10 @@
 const app = require("./src/app");
+const dotenv = require("dotenv");
 
-const PORT = 3000;
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log(`=================================`);
-  console.log(`Server PopTube Jalan di port ${PORT}`);
-  console.log(`Cek di: http://localhost:${PORT}`);
-  console.log(`=================================`);
+  console.log(`Server running on port ${PORT}`);
 });

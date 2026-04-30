@@ -1,15 +1,46 @@
-require("dotenv").config();
-
 const express = require("express");
+const dotenv = require("dotenv");
+const cors = require("cors");
+
+dotenv.config();
+
 const app = express();
 
-const apiRouter = require("./routes/api");
-
-const cors = require("cors");
+// Middleware
 app.use(cors());
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use("/api", apiRouter);
+// Routes
+const apiRoutes = require("./routes/api");
+const authRoutes = require("./routes/authRoutes,js");
+
+app.use("/api", apiRoutes);
+app.use("/api/auth", authRoutes);
+
+// Root endpoint
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "Welcome to Poptube API"
+  });
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found"
+  });
+});
+
+// Error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Internal server error"
+  });
+});
 
 module.exports = app;

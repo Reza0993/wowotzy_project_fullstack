@@ -7,52 +7,25 @@ const HistoryController = require("../controllers/HistoryController");
 const CommentController = require("../controllers/CommentController");
 const UserController = require("../controllers/UserController");
 
-const auth = require("../middlewares/auth");
-const authorize = require("../middlewares/authorize");
-
-/**
-USER
-*/
-
-router.post("/login", UserController.login);
-
-router.get("/user", auth, authorize("admin"), UserController.index);
-router.get("/user/:id", auth, UserController.show);
-router.post("/user", UserController.store);
-router.put("/user/:id", auth, UserController.update);
-router.delete("/user/:id", UserController.delete);
-/**router.delete("/user/:id", auth, authorize("admin"), UserController.delete);
-
-/**
-FILM
-*/
+router.get("/users", UserController.index);
+router.get("/users/:id", UserController.show);
+router.post("/users", UserController.store);
+router.put("/users/:id", UserController.update);
+router.delete("/users/:id", UserController.delete);
 
 router.get("/film", FilmController.index);
-router.post("/film", auth, authorize("admin"), FilmController.store);
-router.put("/film/:id", auth, authorize("admin"), FilmController.update);
-router.delete("/film/:id", auth, authorize("admin"), FilmController.delete);
+router.post("/film", FilmController.store);
+router.put("/film/:id", FilmController.update);
 
-/**
-WATCHLIST
-*/
+router.get("/watchlist", WatchlistController.index);
+router.post("/watchlist", WatchlistController.store);
+router.delete("/watchlist/:id", WatchlistController.delete);
 
-router.get("/watchlist", auth, WatchlistController.index);
-router.post("/watchlist", auth, WatchlistController.store);
-router.delete("/watchlist/:id", auth, WatchlistController.delete);
-
-/**
-HISTORY
-*/
-
-router.get("/history", auth, HistoryController.index);
-router.post("/history", auth, HistoryController.store);
-router.delete("/history/:id", auth, HistoryController.delete);
-
-/**
-COMMENTS
-*/
+router.get("/history", HistoryController.index);
+router.post("/history", HistoryController.store);
+router.delete("/history/:id", HistoryController.delete);
 
 router.get("/comments/:id", CommentController.getComments);
-router.post("/comments", auth, CommentController.addComment);
+router.post("/comments", CommentController.addComment);
 
 module.exports = router;

@@ -1,15 +1,24 @@
-const errorHandler = (
-  res,
-  error,
-  status = 500,
-  message = "Terjadi kesalahan",
-) => {
-  console.log(error);
+const errorHandler = (res, error, statusCode = 500, customMessage = null) => {
+  if (Array.isArray(error)) {
+    return res.status(statusCode).json({
+      success: false,
+      message: customMessage || "Validasi gagal",
+      errors: error
+    });
+  }
 
-  return res.status(status).json({
+  if (typeof error === "string") {
+    return res.status(statusCode).json({
+      success: false,
+      message: error
+    });
+  }
+
+  const message = error?.message || customMessage || "Terjadi kesalahan server";
+  
+  return res.status(statusCode).json({
     success: false,
-    message: message,
-    errors: error?.message || error,
+    message: message
   });
 };
 
