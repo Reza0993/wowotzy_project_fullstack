@@ -22,7 +22,7 @@ const validate = (data) => {
   return errors;
 };
 
-const validateFilm = (data) => {
+const validateFilm = (data, file) => {
   const { judul, deskripsi, video_url, foto_url, id_admin } = data;
   const errors = [];
 
@@ -42,8 +42,12 @@ const validateFilm = (data) => {
     errors.push("Link video harus diisi.");
   }
 
-  if (!foto_url) {
-    errors.push("Link foto harus diisi.");
+  //if (!foto_url) {
+  //  errors.push("Link foto harus diisi.");
+  //}
+
+  if (!file) {
+    errors.push("Foto wajib diupload.");
   }
 
   if (!id_admin) {
@@ -235,5 +239,5 @@ module.exports = {
   validateRegister,
   validateLogin,
   validateProfile,
-  validateChangePassword
+  validateChangePassword,
 };

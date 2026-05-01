@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/upload");
 
 const FilmController = require("../controllers/FilmController");
 const WatchlistController = require("../controllers/WatchlistController");
@@ -14,9 +15,10 @@ router.put("/users/:id", UserController.update);
 router.delete("/users/:id", UserController.delete);
 
 router.get("/film", FilmController.index);
-router.post("/film", FilmController.store);
+//router.post("/film", FilmController.store);
 router.put("/film/:id", FilmController.update);
 router.delete("/film/:id", FilmController.delete);
+router.post("/film", upload.single("foto_url"), FilmController.store);
 
 router.get("/watchlist", WatchlistController.index);
 router.post("/watchlist", WatchlistController.store);

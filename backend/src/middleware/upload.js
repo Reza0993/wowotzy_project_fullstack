@@ -6,7 +6,7 @@ const path = require("path");
 // =======================
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "src/uploads/");
   },
 
   filename: (req, file, cb) => {
@@ -29,7 +29,10 @@ const fileFilter = (req, file, cb) => {
   if (allowedMimeTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Hanya file gambar (JPG, JPEG, PNG) yang diperbolehkan"), false);
+    cb(
+      new Error("Hanya file gambar (JPG, JPEG, PNG) yang diperbolehkan"),
+      false,
+    );
   }
 };
 

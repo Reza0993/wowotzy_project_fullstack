@@ -23,7 +23,7 @@ class FilmController {
   async store(req, res) {
     try {
       // VALIDASI BODY
-      const errors = await validateFilm(req.body);
+      const errors = await validateFilm(req.body, req.file);
 
       if (errors.length > 0) {
         return errorHandler(res, errors, 400, "Validasi gagal");
@@ -38,7 +38,7 @@ class FilmController {
       // ✅ GABUNG DATA
       const data = {
         ...req.body,
-        image: image,
+        foto_url: image,
       };
 
       const film = await Film.create(data);
