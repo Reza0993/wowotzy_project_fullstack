@@ -16,6 +16,7 @@ router.delete("/users/:id", UserController.delete);
 router.get("/film", FilmController.index);
 router.post("/film", FilmController.store);
 router.put("/film/:id", FilmController.update);
+router.delete("/film/:id", FilmController.delete);
 
 router.get("/watchlist", WatchlistController.index);
 router.post("/watchlist", WatchlistController.store);
