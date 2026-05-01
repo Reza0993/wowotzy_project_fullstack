@@ -3,6 +3,7 @@ const { validateWatchlist, validateFilm } = require("../utils/Validation");
 const errorHandler = require("../utils/errorHandler");
 
 class FilmController {
+  // GET ALL
   async index(req, res) {
     try {
       const films = await Film.all();
@@ -11,22 +12,36 @@ class FilmController {
         data: films,
       });
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Gagal mengambil data", error: error.message });
+      res.status(500).json({
+        message: "Gagal mengambil data",
+        error: error.message,
+      });
     }
   }
-  //FUNGSI CREATE
+
+  // CREATE + UPLOAD FILE
   async store(req, res) {
     try {
-      //VALIDASI
+      // VALIDASI BODY
       const errors = await validateFilm(req.body);
 
       if (errors.length > 0) {
         return errorHandler(res, errors, 400, "Validasi gagal");
       }
 
-      const film = await Film.create(req.body);
+      // ✅ AMBIL FILE DARI MULTER
+      let image = null;
+      if (req.file) {
+        image = req.file.filename;
+      }
+
+      // ✅ GABUNG DATA
+      const data = {
+        ...req.body,
+        image: image,
+      };
+
+      const film = await Film.create(data);
 
       res.status(201).json({
         success: true,
@@ -34,12 +49,11 @@ class FilmController {
         data: film,
       });
     } catch (error) {
-      // ✅ ERROR HANDLING TERPUSAT
       return errorHandler(res, error);
     }
   }
 
-  //FUNGSI UPDATE
+  // UPDATE + OPSIONAL UPDATE FILE
   async update(req, res) {
     try {
       const { id } = req.params;
@@ -53,8 +67,20 @@ class FilmController {
       if (errors.length > 0) {
         return errorHandler(res, errors, 400, "Validasi gagal");
       }
-      // KIRIM id + data
-      const result = await Film.update(id, req.body);
+
+      // ✅ HANDLE FILE BARU (JIKA ADA)
+      let image = req.body.image;
+
+      if (req.file) {
+        image = req.file.filename;
+      }
+
+      const data = {
+        ...req.body,
+        image: image,
+      };
+
+      const result = await Film.update(id, data);
 
       if (result.affectedRows === 0) {
         return errorHandler(res, "Data tidak ditemukan", 404);
@@ -69,12 +95,11 @@ class FilmController {
     }
   }
 
-  //delete
+  // DELETE
   async delete(req, res) {
     try {
       const id = req.params.id;
 
-      // Validasi sederhana
       if (isNaN(id)) {
         return errorHandler(res, "ID harus berupa angka", 400);
       }
