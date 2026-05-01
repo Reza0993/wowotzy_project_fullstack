@@ -15,7 +15,7 @@ db.connect((err) => {
     console.error("Database connection failed:", err.message);
     return;
   }
-  console.log("Database connected");
+  console.log("Database Berhasil Terhubung!!");
 });
 
 module.exports = db;
