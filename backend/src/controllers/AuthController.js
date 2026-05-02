@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const errorHandler = require("../utils/errorHandler");
+const jwt = require("jsonwebtoken");
 
 class AuthController {
   // REGISTER
@@ -8,7 +9,11 @@ class AuthController {
       const { username, email, password, role } = req.body;
 
       if (!username || !email || !password) {
-        return errorHandler(res, "Username, email, dan password wajib diisi", 400);
+        return errorHandler(
+          res,
+          "Username, email, dan password wajib diisi",
+          400,
+        );
       }
 
       if (username.length < 3) {
@@ -28,7 +33,7 @@ class AuthController {
         username,
         email,
         password,
-        role: role || "user"
+        role: role || "user",
       };
 
       const newUser = await User.create(userData);
@@ -36,9 +41,8 @@ class AuthController {
       res.status(201).json({
         success: true,
         message: "Registrasi berhasil! Silakan login.",
-        data: newUser
+        data: newUser,
       });
-
     } catch (error) {
       return errorHandler(res, error);
     }
@@ -54,7 +58,7 @@ class AuthController {
       }
 
       const user = await User.findByEmail(email);
-      
+
       if (!user) {
         return errorHandler(res, "Email atau password salah", 401);
       }
@@ -63,14 +67,23 @@ class AuthController {
         return errorHandler(res, "Email atau password salah", 401);
       }
 
-      const { password: _, ...userWithoutPassword } = user;
+      //const { password: _, ...userWithoutPassword } = user;
+
+      const token = jwt.sign(
+        {
+          id: user.id_user,
+          role: user.role,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" },
+      );
 
       res.status(200).json({
         success: true,
         message: "Login berhasil!",
-        data: userWithoutPassword
+        //data: userWithoutPassword,
+        token: token,
       });
-
     } catch (error) {
       return errorHandler(res, error);
     }
@@ -79,7 +92,7 @@ class AuthController {
   // GET PROFILE
   async getProfile(req, res) {
     try {
-      const userId = req.userId;
+      const userId = req.user.id;
       const user = await User.find(userId);
 
       if (!user) {
@@ -88,7 +101,7 @@ class AuthController {
 
       res.status(200).json({
         success: true,
-        data: user
+        data: user,
       });
     } catch (error) {
       return errorHandler(res, error);
@@ -99,7 +112,7 @@ class AuthController {
   async logout(req, res) {
     res.status(200).json({
       success: true,
-      message: "Logout berhasil"
+      message: "Logout berhasil",
     });
   }
 }
