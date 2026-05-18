@@ -12,6 +12,20 @@ class Film {
     });
   }
 
+
+  static find(id) {
+  return new Promise((resolve, reject) => {
+    const sql = "SELECT * FROM films WHERE id_film = ?";
+
+    db.query(sql, [id], (err, results) => {
+      if (err) reject(err);
+
+      resolve(results[0]);
+    });
+  });
+}
+
+
   // Tambah film baru (Untuk fitur CRUD)
   static create(data) {
     return new Promise((resolve, reject) => {

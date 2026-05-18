@@ -19,6 +19,32 @@ class FilmController {
     }
   }
 
+
+  // GET DETAIL FILM
+async show(req, res) {
+  try {
+    const id = req.params.id;
+
+    if (isNaN(id)) {
+      return errorHandler(res, "ID harus berupa angka", 400);
+    }
+
+    const film = await Film.find(id);
+
+    if (!film) {
+      return errorHandler(res, "Film tidak ditemukan", 404);
+    }
+
+    res.status(200).json({
+      success: true,
+      data: film,
+    });
+  } catch (error) {
+    return errorHandler(res, error);
+  }
+}
+
+
   // CREATE + UPLOAD FILE
   async store(req, res) {
     try {

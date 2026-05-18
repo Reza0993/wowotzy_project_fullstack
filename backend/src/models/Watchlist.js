@@ -12,6 +12,22 @@ class Watchlist {
     });
   }
 
+  // ✅ Mengambil watchlist spesifik milik satu user dan join dengan film
+  static findByUser(userId) {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT w.id_watchlist, w.id_user, w.id_film, w.tanggal_tambah, 
+               f.judul, f.deskripsi, f.video_url, f.foto_url
+        FROM watchlist w
+        JOIN films f ON w.id_film = f.id_film
+        WHERE w.id_user = ?`;
+      db.query(sql, [userId], (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      });
+    });
+  }
+
   static create(data) {
     return new Promise((resolve, reject) => {
       const sql =

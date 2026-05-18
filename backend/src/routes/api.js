@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/upload");
+const authMiddleware = require("../middleware/auth"); // ✅ Impor Auth Middleware
 
 const FilmController = require("../controllers/FilmController");
 const WatchlistController = require("../controllers/WatchlistController");
@@ -16,19 +17,23 @@ router.delete("/users/:id", UserController.delete);
 
 router.get("/film", FilmController.index);
 //router.post("/film", FilmController.store);
+router.get("/film/:id", FilmController.show);
 router.put("/film/:id", FilmController.update);
 router.delete("/film/:id", FilmController.delete);
 router.post("/film", upload.single("foto_url"), FilmController.store);
 
-router.get("/watchlist", WatchlistController.index);
-router.post("/watchlist", WatchlistController.store);
-router.delete("/watchlist/:id", WatchlistController.delete);
+// ✅ Rute Watchlist yang Dilindungi JWT
+router.get("/watchlist", authMiddleware, WatchlistController.index);
+router.post("/watchlist", authMiddleware, WatchlistController.store);
+router.delete("/watchlist/:id", authMiddleware, WatchlistController.delete);
 
-router.get("/history", HistoryController.index);
-router.post("/history", HistoryController.store);
-router.delete("/history/:id", HistoryController.delete);
+// ✅ Rute History yang Dilindungi JWT
+router.get("/history", authMiddleware, HistoryController.index);
+router.post("/history", authMiddleware, HistoryController.store);
+router.delete("/history/:id", authMiddleware, HistoryController.delete);
 
+// ✅ Rute Komentar (Melihat bersifat publik, Mengirim dilindungi JWT)
 router.get("/comments/:id", CommentController.getComments);
-router.post("/comments", CommentController.addComment);
+router.post("/comments", authMiddleware, CommentController.addComment);
 
 module.exports = router;

@@ -5,11 +5,12 @@ const errorHandler = require("../utils/errorHandler");
 class WatchlistController {
   async index(req, res) {
     try {
-      const watchlist = await Watchlist.all();
+      // ✅ Ambil watchlist khusus milik user yang terotentikasi
+      const watchlist = await Watchlist.findByUser(req.user.id);
 
       res.status(200).json({
         success: true,
-        message: "Menampilkan semua daftar watchlist film",
+        message: "Menampilkan semua daftar watchlist film Anda",
         data: watchlist,
       });
     } catch (error) {
@@ -19,6 +20,9 @@ class WatchlistController {
 
   async store(req, res) {
     try {
+      // ✅ Injeksi id_user secara aman dari token JWT sebelum validasi
+      req.body.id_user = req.user.id;
+
       // ✅ VALIDASI (sesuai materi: sebelum proses)
       const errors = validate(req.body);
 

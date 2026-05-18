@@ -26,6 +26,14 @@ app.get("/", (req, res) => {
   });
 });
 
+const path = require("path");
+
+// ✅ Daftarkan static folder uploads sebelum handler 404 dan handler error
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "uploads"))
+);
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({

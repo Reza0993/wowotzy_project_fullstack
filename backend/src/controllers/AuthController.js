@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const errorHandler = require("../utils/errorHandler");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 class AuthController {
   // REGISTER
@@ -29,10 +30,13 @@ class AuthController {
         return errorHandler(res, "Email sudah terdaftar", 400);
       }
 
+      // ✅ Hash password secara aman menggunakan bcrypt sebelum disimpan
+      const hashedPassword = await bcrypt.hash(password, 10);
+
       const userData = {
         username,
         email,
-        password,
+        password: hashedPassword,
         role: role || "user",
       };
 
@@ -59,11 +63,15 @@ class AuthController {
 
       const user = await User.findByEmail(email);
 
-      if (!user) {
-        return errorHandler(res, "Email atau password salah", 401);
+      // ✅ Cocokkan hash password menggunakan bcrypt, berikan fallback perbandingan langsung untuk kompatibilitas data bawaan DB
+      let isMatch = false;
+      try {
+        isMatch = await bcrypt.compare(password, user.password);
+      } catch (err) {
+        console.error("Bcrypt compare error:", err);
       }
 
-      if (user.password !== password) {
+      if (!isMatch && user.password !== password) {
         return errorHandler(res, "Email atau password salah", 401);
       }
 

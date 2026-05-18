@@ -10,6 +10,22 @@ class History {
     });
   }
 
+  // ✅ Mengambil history spesifik milik satu user dan join dengan film
+  static findByUser(userId) {
+    return new Promise((resolve, reject) => {
+      const sql = `
+        SELECT h.id_history, h.id_user, h.id_film, h.waktu_nonton, 
+               f.judul, f.deskripsi, f.video_url, f.foto_url
+        FROM history h
+        JOIN films f ON h.id_film = f.id_film
+        WHERE h.id_user = ?`;
+      db.query(sql, [userId], (err, results) => {
+        if (err) reject(err);
+        resolve(results);
+      });
+    });
+  }
+
   static create(data) {
     return new Promise((resolve, reject) => {
       const sql =

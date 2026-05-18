@@ -1,0 +1,46 @@
+.movie-row {
+  padding: 0 6%;
+}
+
+.movie-row h2 {
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+  position: relative;
+  padding-left: 14px;
+}
+
+.movie-row h2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 18px;
+  background: linear-gradient(to bottom, #ff1e42, #b3001b);
+  border-radius: 2px;
+}
+
+.movie-list {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  padding: 16px 0 28px 0; /* Ruang bernapas agar efek hover kartu melayang tidak terpotong */
+  margin-bottom: -12px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Sembunyikan scrollbar default kasar pada baris film */
+.movie-list::-webkit-scrollbar {
+  display: none;
+}
+
+.movie-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

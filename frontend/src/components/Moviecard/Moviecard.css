@@ -1,0 +1,60 @@
+.movie-card {
+  position: relative;
+  min-width: 190px;
+  height: 285px;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.movie-card:hover {
+  transform: translateY(-10px);
+  border-color: rgba(255, 30, 66, 0.4);
+  box-shadow: 0 12px 30px rgba(255, 30, 66, 0.25), 
+              0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.movie-card:hover img {
+  transform: scale(1.08);
+}
+
+.movie-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 5, 6, 0.95) 0%, rgba(10, 5, 6, 0.4) 50%, rgba(10, 5, 6, 0) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px 16px;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-overlay span {
+  color: white;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  transform: translateY(10px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.movie-card:hover .movie-overlay span {
+  transform: translateY(0);
+}

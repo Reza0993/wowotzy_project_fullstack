@@ -21,6 +21,9 @@ class CommentController {
   // tambah komentar
   async addComment(req, res) {
     try {
+      // ✅ Injeksi id_user secara aman dari token JWT sebelum validasi
+      req.body.id_user = req.user.id;
+
       const errors = validateComment(req.body);
 
       if (errors.length > 0) {

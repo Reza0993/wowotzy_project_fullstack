@@ -10,11 +10,12 @@ const {
 class HistoryController {
   async index(req, res) {
     try {
-      const history = await History.all();
+      // ✅ Ambil history khusus milik user yang terotentikasi
+      const history = await History.findByUser(req.user.id);
 
       res.status(200).json({
         success: true,
-        message: "Menampilkan semua daftar history film PopTube",
+        message: "Menampilkan semua daftar history film PopTube Anda",
         data: history,
       });
     } catch (error) {
@@ -24,6 +25,9 @@ class HistoryController {
 
   async store(req, res) {
     try {
+      // ✅ Injeksi id_user secara aman dari token JWT sebelum validasi
+      req.body.id_user = req.user.id;
+
       //VALIDASI
       const errors = validate(req.body);
 
