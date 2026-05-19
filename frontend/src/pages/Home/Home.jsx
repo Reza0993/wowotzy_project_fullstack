@@ -46,13 +46,15 @@ function Home() {
 
   // Filter film secara instan saat pengguna mengetik di kolom pencarian
   const filteredMovies = movies.filter((movie) =>
-    movie.judul.toLowerCase().includes(searchQuery.toLowerCase())
+    movie.judul.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Distribusikan hasil filter ke kategori film masing-masing
   const trendingMovies = filteredMovies.slice(0, 4);
-  const popularMovies = filteredMovies.length > 4 ? filteredMovies.slice(4, 8) : filteredMovies;
-  const actionMovies = filteredMovies.length > 8 ? filteredMovies.slice(8) : filteredMovies;
+  const popularMovies =
+    filteredMovies.length > 4 ? filteredMovies.slice(4, 8) : filteredMovies;
+  const actionMovies =
+    filteredMovies.length > 8 ? filteredMovies.slice(8) : filteredMovies;
 
   return (
     <div className="home">
@@ -64,7 +66,7 @@ function Home() {
         </div>
       )}
 
-      <Navbar 
+      <Navbar
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         onScrollTo={scrollToSection}
@@ -75,41 +77,53 @@ function Home() {
 
       <div className="home-content">
         {filteredMovies.length === 0 && searchQuery !== "" ? (
-          <div style={{ textAlign: "center", padding: "80px 20px", color: "#a0a0a0" }}>
+          <div
+            style={{
+              textAlign: "center",
+              padding: "80px 20px",
+              color: "#a0a0a0",
+            }}
+          >
             <span style={{ fontSize: "50px" }}>🔍</span>
-            <h2 style={{ color: "white", marginTop: "15px", fontFamily: "Plus Jakarta Sans" }}>Film Tidak Ditemukan</h2>
-            <p style={{ fontSize: "14px", marginTop: "5px" }}>Maaf, tidak ada judul film yang cocok dengan "{searchQuery}". Coba kata kunci lain!</p>
+            <h2
+              style={{
+                color: "white",
+                marginTop: "15px",
+                fontFamily: "Plus Jakarta Sans",
+              }}
+            >
+              Film Tidak Ditemukan
+            </h2>
+            <p style={{ fontSize: "14px", marginTop: "5px" }}>
+              Maaf, tidak ada judul film yang cocok dengan "{searchQuery}". Coba
+              kata kunci lain!
+            </p>
           </div>
         ) : (
           <>
             <MovieRow
-              title={searchQuery ? `Hasil Pencarian untuk "${searchQuery}"` : "Semua Film"}
+              title={
+                searchQuery
+                  ? `Hasil Pencarian untuk "${searchQuery}"`
+                  : "Semua Film"
+              }
               movies={filteredMovies}
             />
 
             {!searchQuery && (
               <>
-                <MovieRow
-                  title="Trending Now"
-                  movies={trendingMovies}
-                />
+                <MovieRow title="Trending Now" movies={trendingMovies} />
 
-                <MovieRow
-                  title="Popular Movies"
-                  movies={popularMovies}
-                />
+                <MovieRow title="Popular Movies" movies={popularMovies} />
 
-                <MovieRow
-                  title="Action Thriller"
-                  movies={actionMovies}
-                />
+                <MovieRow title="Action Thriller" movies={actionMovies} />
               </>
             )}
           </>
         )}
       </div>
 
-      <BottomNav 
+      <BottomNav
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         onScrollTo={scrollToSection}
