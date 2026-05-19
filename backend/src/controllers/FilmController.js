@@ -95,7 +95,7 @@ async show(req, res) {
       }
 
       // ✅ HANDLE FILE BARU (JIKA ADA)
-      let image = req.body.image;
+      let image = req.body.foto_url;
 
       if (req.file) {
         image = req.file.filename;
@@ -103,8 +103,11 @@ async show(req, res) {
 
       const data = {
         ...req.body,
-        image: image,
+        foto_url: image,
       };
+
+      // Hapus properti 'image' agar tidak bentrok dengan kolom database
+      delete data.image;
 
       const result = await Film.update(id, data);
 

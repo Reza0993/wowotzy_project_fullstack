@@ -18,7 +18,7 @@ router.delete("/users/:id", UserController.delete);
 router.get("/film", FilmController.index);
 //router.post("/film", FilmController.store);
 router.get("/film/:id", FilmController.show);
-router.put("/film/:id", FilmController.update);
+router.put("/film/:id", upload.single("foto_url"), FilmController.update);
 router.delete("/film/:id", FilmController.delete);
 router.post("/film", upload.single("foto_url"), FilmController.store);
 
