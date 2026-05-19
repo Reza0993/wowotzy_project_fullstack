@@ -108,16 +108,11 @@ function Navbar({
         >
           Rilis Baru
         </span>
-        <span
-          className="nav-link"
-          onClick={() =>
-            onTriggerToast(
-              "📋 Daftar Saya: Film kesayangan Anda telah disimpan di bookmark lokal! 🌟",
-            )
-          }
-        >
-          Daftar Saya
-        </span>
+        {isLoggedIn && (
+          <span className="nav-link" onClick={() => navigate("/watchlist")}>
+            Daftar Saya
+          </span>
+        )}
       </nav>
 
       <div className="navbar-right">

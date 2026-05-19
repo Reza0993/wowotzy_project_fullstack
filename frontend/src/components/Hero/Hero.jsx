@@ -4,9 +4,10 @@ import "./Hero.css";
 const DEFAULT_MOVIE = {
   id_film: 10,
   judul: "Interstellar",
-  deskripsi: "When Earth becomes uninhabitable, a team of explorers travels through a wormhole in space in an attempt to ensure humanity's survival.",
+  deskripsi:
+    "When Earth becomes uninhabitable, a team of explorers travels through a wormhole in space in an attempt to ensure humanity's survival.",
   video_url: "https://youtu.be/zSWdZVtXT7E",
-  foto_url: "https://image.tmdb.org/t/p/original/gEU2QpI6EIt7t8S3d8n9nE8Yj4q.jpg"
+  foto_url: "1779173901839-795912854.jpg",
 };
 
 function Hero({ movie }) {
@@ -32,7 +33,8 @@ function Hero({ movie }) {
 
   // Fungsi helper untuk mendeteksi tipe URL gambar (eksternal vs lokal)
   const getImageUrl = (url) => {
-    if (!url) return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
+    if (!url)
+      return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
     if (url.startsWith("http://") || url.startsWith("https://")) {
       return url;
     }
@@ -86,11 +88,17 @@ function Hero({ movie }) {
         <p>{activeMovie.deskripsi}</p>
 
         <div className="hero-buttons">
-          <Link to={`/film/${activeMovie.id_film}`} style={{ textDecoration: "none" }}>
+          <Link
+            to={`/film/${activeMovie.id_film}`}
+            style={{ textDecoration: "none" }}
+          >
             <button className="play-btn">▶ Play</button>
           </Link>
 
-          <Link to={`/film/${activeMovie.id_film}`} style={{ textDecoration: "none" }}>
+          <Link
+            to={`/film/${activeMovie.id_film}`}
+            style={{ textDecoration: "none" }}
+          >
             <button className="info-btn">ℹ More Info</button>
           </Link>
         </div>
