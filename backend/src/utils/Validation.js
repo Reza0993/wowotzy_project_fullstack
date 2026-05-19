@@ -22,7 +22,7 @@ const validate = (data) => {
   return errors;
 };
 
-const validateFilm = (data, file) => {
+const validateFilm = (data, file, isUpdate = false) => {
   const { judul, deskripsi, video_url, foto_url, id_admin } = data;
   const errors = [];
 
@@ -46,7 +46,7 @@ const validateFilm = (data, file) => {
   //  errors.push("Link foto harus diisi.");
   //}
 
-  if (!file) {
+  if (!file && !isUpdate) {
     errors.push("Foto wajib diupload.");
   }
 

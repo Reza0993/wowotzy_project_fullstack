@@ -89,7 +89,7 @@ async show(req, res) {
       }
 
       // VALIDASI
-      const errors = validateFilm(req.body);
+      const errors = validateFilm(req.body, req.file, true);
       if (errors.length > 0) {
         return errorHandler(res, errors, 400, "Validasi gagal");
       }

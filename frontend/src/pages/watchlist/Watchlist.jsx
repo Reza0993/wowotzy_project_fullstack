@@ -23,6 +23,16 @@ function Watchlist() {
     };
     fetchWatchlist();
   }, []);
+
+  // Fungsi helper untuk mendeteksi tipe URL gambar (eksternal vs lokal)
+  const getImageUrl = (url) => {
+    if (!url) return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    return `http://localhost:3000/uploads/${url}`;
+  };
+
   return (
     <div className="home min-h-screen relative bg-gradient-to-b from-[#1a080a] to-[#0a0506] ">
       <Navbar />
@@ -39,9 +49,10 @@ function Watchlist() {
                 className="bg-[#1a080a]/80 rounded-lg shadow-lg overflow-hidden hover:scale-105 transition-transform"
               >
                 <img
-                  src={film.foto_url}
+                  src={getImageUrl(film.foto_url)}
                   alt={film.judul}
                   className="w-full h-48 object-cover"
+                  referrerPolicy="no-referrer"
                 />
                 <div className="p-4">
                   <h2 className="text-white font-semibold text-lg">

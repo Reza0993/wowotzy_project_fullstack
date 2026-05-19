@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import API from "../../services/api";
 
@@ -14,10 +15,22 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("home");
   const [toast, setToast] = useState({ show: false, message: "" });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     getMovies();
   }, []);
+
+  // Efek pendengar parameter query scroll untuk navigasi lintas halaman
+  useEffect(() => {
+    const scrollVal = searchParams.get("scroll");
+    if (scrollVal && movies && movies.length > 0) {
+      setTimeout(() => {
+        scrollToSection(`.movie-row:nth-of-type(${scrollVal})`);
+        setSearchParams({}, { replace: true });
+      }, 300);
+    }
+  }, [searchParams, movies]);
 
   async function getMovies() {
     try {

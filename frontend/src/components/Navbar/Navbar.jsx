@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 function Navbar({
@@ -12,6 +12,10 @@ function Navbar({
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
 
   // Efek transisi mengecilkan navbar saat digulir (Scroll Shrink)
   useEffect(() => {
@@ -61,39 +65,60 @@ function Navbar({
             <h1>PopTube</h1>
           </div>
         </Link>
-
-        {/* Tautan Navigasi Sinematik Desktop */}
-        <nav className="navbar-nav">
-          <span
-            className="nav-link active"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          >
-            Home
-          </span>
-          <span
-            className="nav-link"
-            onClick={() => onScrollTo(".movie-row:nth-of-type(2)")}
-          >
-            Film Terpopuler
-          </span>
-          <span
-            className="nav-link"
-            onClick={() => onScrollTo(".movie-row:nth-of-type(3)")}
-          >
-            Rilis Baru
-          </span>
-          <span
-            className="nav-link"
-            onClick={() =>
-              onTriggerToast(
-                "📋 Daftar Saya: Film kesayangan Anda telah disimpan di bookmark lokal! 🌟",
-              )
-            }
-          >
-            Daftar Saya
-          </span>
-        </nav>
       </div>
+
+      {/* Tautan Navigasi Sinematik Desktop */}
+      <nav className="navbar-nav">
+        <span
+          className={`nav-link ${isHomePage ? "active" : ""}`}
+          onClick={() => {
+            if (isHomePage) {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              navigate("/");
+              setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }, 100);
+            }
+          }}
+        >
+          Home
+        </span>
+        <span
+          className="nav-link"
+          onClick={() => {
+            if (isHomePage && onScrollTo) {
+              onScrollTo(".movie-row:nth-of-type(2)");
+            } else {
+              navigate("/?scroll=2");
+            }
+          }}
+        >
+          Film Terpopuler
+        </span>
+        <span
+          className="nav-link"
+          onClick={() => {
+            if (isHomePage && onScrollTo) {
+              onScrollTo(".movie-row:nth-of-type(3)");
+            } else {
+              navigate("/?scroll=3");
+            }
+          }}
+        >
+          Rilis Baru
+        </span>
+        <span
+          className="nav-link"
+          onClick={() =>
+            onTriggerToast(
+              "📋 Daftar Saya: Film kesayangan Anda telah disimpan di bookmark lokal! 🌟",
+            )
+          }
+        >
+          Daftar Saya
+        </span>
+      </nav>
 
       <div className="navbar-right">
         {/* Kolom Pencarian Dinamis Netflix-Style yang Meluncur Keluar */}

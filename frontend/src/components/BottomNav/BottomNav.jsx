@@ -1,7 +1,11 @@
+import { useLocation, useNavigate } from "react-router-dom";
 import "./BottomNav.css";
 
 function BottomNav({ activeTab, setActiveTab, onScrollTo, onTriggerToast }) {
   const currentTab = activeTab || "home";
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHomePage = location.pathname === "/";
 
   return (
     <nav className="bottom-nav">
@@ -10,7 +14,11 @@ function BottomNav({ activeTab, setActiveTab, onScrollTo, onTriggerToast }) {
         className={`bottom-nav-item ${currentTab === "home" ? "active" : ""}`}
         onClick={() => {
           if (setActiveTab) setActiveTab("home");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          if (isHomePage) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } else {
+            navigate("/");
+          }
         }}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="nav-icon">

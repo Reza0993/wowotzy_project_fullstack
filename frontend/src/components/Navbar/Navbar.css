@@ -61,8 +61,10 @@
 .navbar-nav {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-left: 40px;
+  gap: 28px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-link {

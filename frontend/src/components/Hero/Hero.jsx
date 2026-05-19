@@ -30,6 +30,15 @@ function Hero({ movie }) {
     return null;
   };
 
+  // Fungsi helper untuk mendeteksi tipe URL gambar (eksternal vs lokal)
+  const getImageUrl = (url) => {
+    if (!url) return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+    return `http://localhost:3000/uploads/${url}`;
+  };
+
   const videoId = getYoutubeId(activeMovie.video_url);
   const embedUrl = videoId
     ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&playsinline=1`
@@ -49,7 +58,7 @@ function Hero({ movie }) {
       ) : (
         /* Cadangan Gambar Latar Belakang HD jika URL video tidak ada */
         <img
-          src={activeMovie.foto_url}
+          src={getImageUrl(activeMovie.foto_url)}
           alt={activeMovie.judul}
           className="hero-backdrop-img"
           referrerPolicy="no-referrer"
@@ -59,7 +68,7 @@ function Hero({ movie }) {
       {/* Gambar Cadangan dengan z-index rendah agar tidak berkedip saat memuat video */}
       {embedUrl && activeMovie.foto_url && (
         <img
-          src={activeMovie.foto_url}
+          src={getImageUrl(activeMovie.foto_url)}
           alt=""
           className="hero-backdrop-img"
           style={{ zIndex: -1 }}
