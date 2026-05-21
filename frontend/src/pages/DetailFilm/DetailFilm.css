@@ -19,7 +19,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .detail-container {
@@ -72,8 +74,9 @@
   height: 480px;
   object-fit: cover;
   border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 
-              0 0 40px rgba(255, 30, 66, 0.1);
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.6),
+    0 0 40px rgba(255, 30, 66, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.08);
   transition: transform 0.3s ease;
 }
@@ -105,7 +108,7 @@
 .movie-title {
   font-size: 48px;
   font-weight: 800;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   letter-spacing: -0.02em;
   line-height: 1.1;
   background: linear-gradient(135deg, #ffffff 50%, #ffcbd4 100%);
@@ -145,7 +148,43 @@
   align-self: center;
   box-shadow: 0 0 20px rgba(255, 30, 66, 0.25);
   animation: pulse-badge 2.5s infinite alternate ease-in-out;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.bookmark-btn {
+  background: rgba(255, 30, 66, 0.12);
+
+  border: 1px solid rgba(255, 30, 66, 0.35);
+
+  color: #ff1e42;
+
+  padding: 12px 24px;
+
+  border-radius: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+
+  margin-right: 16px;
+}
+
+.bookmark-btn:hover {
+  transform: translateY(-2px);
+
+  background: rgba(255, 30, 66, 0.2);
+
+  box-shadow: 0 0 20px rgba(255, 30, 66, 0.25);
+}
+
+.bookmark-btn.saved {
+  background: linear-gradient(135deg, #ff1e42 0%, #b3001b 100%);
+
+  color: white;
+
+  border: none;
 }
 
 @keyframes pulse-badge {
@@ -166,16 +205,18 @@
   height: 0;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85),
-              0 0 50px rgba(255, 30, 66, 0.12);
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(255, 30, 66, 0.12);
   border: 1.5px solid rgba(255, 255, 255, 0.08);
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .cinema-screen:hover {
   border-color: rgba(255, 30, 66, 0.4);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95),
-              0 0 60px rgba(255, 30, 66, 0.25);
+  box-shadow:
+    0 30px 70px rgba(0, 0, 0, 0.95),
+    0 0 60px rgba(255, 30, 66, 0.25);
   transform: translateY(-2px);
 }
 
@@ -233,17 +274,17 @@
     align-items: center;
     gap: 30px;
   }
-  
+
   .detail-poster {
     width: 240px;
     height: 360px;
   }
-  
+
   .movie-title {
     font-size: 32px;
     text-align: center;
   }
-  
+
   .movie-badge {
     margin: 0 auto;
   }

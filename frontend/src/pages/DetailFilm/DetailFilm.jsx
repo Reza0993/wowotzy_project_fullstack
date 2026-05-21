@@ -12,9 +12,11 @@ function DetailFilm() {
   const { id } = useParams();
 
   const [movie, setMovie] = useState(null);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     getDetailMovie();
+    checkWatchlist();
   }, []);
 
   async function getDetailMovie() {
@@ -25,10 +27,71 @@ function DetailFilm() {
       console.log(error);
     }
   }
+  async function checkWatchlist() {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await API.get("/api/watchlist", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const isSaved = response.data.data.some((item) => item.id_film == id);
+
+      setSaved(isSaved);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function toggleWatchlist() {
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!saved) {
+        await API.post(
+          "/api/watchlist",
+          {
+            id_film: id,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        setSaved(true);
+      } else {
+        const response = await API.get("/api/watchlist", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const movieSaved = response.data.data.find(
+          (item) => item.id_film == id,
+        );
+
+        if (movieSaved) {
+          await API.delete(`/api/watchlist/${movieSaved.id_watchlist}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+        }
+
+        setSaved(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   // Fungsi helper untuk mendeteksi tipe URL gambar (eksternal vs lokal)
   const getImageUrl = (url) => {
-    if (!url) return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
+    if (!url)
+      return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
     if (url.startsWith("http://") || url.startsWith("https://")) {
       return url;
     }
@@ -72,10 +135,10 @@ function DetailFilm() {
       <div className="detail-container">
         {/* Poster Blur Efek Latar Belakang Sinematik */}
         <div className="detail-backdrop">
-          <img 
-            src={getImageUrl(movie.foto_url)} 
-            alt="" 
-            className="detail-backdrop-img" 
+          <img
+            src={getImageUrl(movie.foto_url)}
+            alt=""
+            className="detail-backdrop-img"
             referrerPolicy="no-referrer"
           />
           <div className="detail-backdrop-overlay"></div>
@@ -99,10 +162,10 @@ function DetailFilm() {
 
         <div className="detail-content">
           <div className="detail-left">
-            <img 
-              src={getImageUrl(movie.foto_url)} 
-              alt={movie.judul} 
-              className="detail-poster" 
+            <img
+              src={getImageUrl(movie.foto_url)}
+              alt={movie.judul}
+              className="detail-poster"
               referrerPolicy="no-referrer"
             />
           </div>
@@ -110,19 +173,31 @@ function DetailFilm() {
           <div className="detail-right">
             <span className="movie-badge">Streaming Now</span>
             <h1 className="movie-title">{movie.judul}</h1>
-            
+
             <p className="movie-description">{movie.deskripsi}</p>
 
             {/* Jika format video_url bukan YouTube, sajikan tombol putar eksternal */}
             {!embedUrl && movie.video_url && (
               <div className="video-fallback">
-                <a href={movie.video_url} target="_blank" rel="noopener noreferrer" className="watch-btn">
+                <a
+                  href={movie.video_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="watch-btn"
+                >
                   ▶️ Tonton Film Sekarang
                 </a>
               </div>
             )}
 
             <div className="action-buttons">
+              <button
+                className={`bookmark-btn ${saved ? "saved" : ""}`}
+                onClick={toggleWatchlist}
+              >
+                {saved ? "✓ Batal Simpan" : "+ Simpan"}
+              </button>
+
               <Link to="/" className="back-btn">
                 ← Kembali ke Beranda
               </Link>

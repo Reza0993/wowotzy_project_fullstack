@@ -7,34 +7,43 @@ function Navbar({
   setSearchQuery,
   onScrollTo,
   onTriggerToast,
-  isLoggedIn,
+  //isLoggedIn,
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
+  const isLoggedIn = !!localStorage.getItem("token");
 
   // Efek transisi mengecilkan navbar saat digulir (Scroll Shrink)
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 30) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      setScrolled(window.scrollY > 30);
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSearchExpanded(false);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
     <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
+      {/* LEFT */}
       <div className="navbar-left">
-        {/* Logo Utama dengan Ikon SVG Play Premium */}
         <Link
           to="/"
           className="navbar-logo-link"
@@ -62,28 +71,30 @@ function Navbar({
                 </linearGradient>
               </defs>
             </svg>
+
             <h1>PopTube</h1>
           </div>
         </Link>
       </div>
 
-      {/* Tautan Navigasi Sinematik Desktop */}
+      {/* DESKTOP NAV */}
       <nav className="navbar-nav">
         <span
           className={`nav-link ${isHomePage ? "active" : ""}`}
           onClick={() => {
             if (isHomePage) {
-              window.scrollTo({ top: 0, behavior: "smooth" });
+              window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
             } else {
               navigate("/");
-              setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }, 100);
             }
           }}
         >
           Home
         </span>
+
         <span
           className="nav-link"
           onClick={() => {
@@ -96,6 +107,7 @@ function Navbar({
         >
           Film Terpopuler
         </span>
+
         <span
           className="nav-link"
           onClick={() => {
@@ -108,6 +120,7 @@ function Navbar({
         >
           Rilis Baru
         </span>
+
         {isLoggedIn && (
           <span className="nav-link" onClick={() => navigate("/watchlist")}>
             Daftar Saya
@@ -115,13 +128,12 @@ function Navbar({
         )}
       </nav>
 
+      {/* DESKTOP RIGHT */}
       <div className="navbar-right">
-        {/* Kolom Pencarian Dinamis Netflix-Style yang Meluncur Keluar */}
-        <div className={`search-container ${searchExpanded ? "expanded" : ""}`}>
+        <div className="search-container">
           <button
             className="search-btn"
             onClick={() => setSearchExpanded(!searchExpanded)}
-            title="Cari Film"
           >
             <svg
               width="20"
@@ -137,6 +149,7 @@ function Navbar({
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
           </button>
+
           {searchExpanded && (
             <input
               type="text"
@@ -144,12 +157,10 @@ function Navbar({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="search-input"
-              autoFocus
             />
           )}
         </div>
 
-        {/* Jika belum login → tampilkan tombol Register & Login */}
         {!isLoggedIn ? (
           <div className="flex gap-3">
             <Link to="/register" className="register-btn">
@@ -161,38 +172,141 @@ function Navbar({
             </Link>
           </div>
         ) : (
-          /* Jika sudah login → avatar + dropdown */
-          <div className="profile-container">
+          <div className="profile-container relative">
             <img
               src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150"
               alt="profile"
-              className="navbar-avatar"
+              className="navbar-avatar cursor-pointer"
               onClick={() => setDropdownOpen(!dropdownOpen)}
             />
+
             {dropdownOpen && (
-              <div className="profile-dropdown">
-                <div className="dropdown-header">
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150"
-                    alt=""
-                  />
-                  <div>
-                    <span className="user-name">Fiona Princess</span>
-                    <span className="user-status">Premium Member</span>
-                  </div>
+              <div className="profile-dropdown absolute right-0 mt-2 w-48 bg-[#1a080a]/90 text-white rounded-md shadow-lg">
+                <div className="dropdown-header p-3 border-b border-gray-700">
+                  <span className="font-semibold">User</span>
+                  <span className="block text-sm text-gray-400">
+                    Premium Member
+                  </span>
                 </div>
-                <div className="dropdown-divider"></div>
-                <span
-                  className="dropdown-item logout"
-                  onClick={() => onTriggerToast("🚪 Anda berhasil keluar!")}
+                <button
+                  className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
+                  onClick={() => {
+                    localStorage.removeItem("token"); // hapus token
+                    navigate("/"); // redirect ke login
+                    window.location.reload(); // refresh agar Navbar update
+                  }}
                 >
-                  🚪 Keluar
-                </span>
+                  Logout
+                </button>
               </div>
             )}
           </div>
         )}
       </div>
+
+      {/* HAMBURGER BUTTON */}
+      <button
+        className="mobile-menu-btn"
+        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      {/* MOBILE MENU */}
+      {mobileMenuOpen && (
+        <div className="mobile-menu">
+          <span
+            className="mobile-link"
+            onClick={() => {
+              if (isHomePage) {
+                window.scrollTo({
+                  top: 0,
+                  behavior: "smooth",
+                });
+              } else {
+                navigate("/");
+              }
+            }}
+          >
+            Home
+          </span>
+          <span
+            className="mobile-link"
+            onClick={() => {
+              if (isHomePage && onScrollTo) {
+                onScrollTo(".movie-row:nth-of-type(2)");
+              } else {
+                navigate("/?scroll=2");
+              }
+            }}
+          >
+            Film Terpopuler
+          </span>
+          <span
+            className="mobile-link"
+            onClick={() => {
+              if (isHomePage && onScrollTo) {
+                onScrollTo(".movie-row:nth-of-type(3)");
+              } else {
+                navigate("/?scroll=3");
+              }
+            }}
+          >
+            Rilis Baru
+          </span>
+          {isLoggedIn && (
+            <span
+              className="mobile-link"
+              onClick={() => navigate("/watchlist")}
+            >
+              Daftar Saya
+            </span>
+          )}
+
+          {isLoggedIn ? (
+            <div className="profile-container relative">
+              <img
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150"
+                alt="profile"
+                className="navbar-avatar cursor-pointer"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              />
+
+              {dropdownOpen && (
+                <div className="profile-dropdown absolute right-0 mt-2 w-48 bg-[#1a080a]/90 text-white rounded-md shadow-lg">
+                  {/* <div className="dropdown-header p-3 border-b border-gray-700">
+                    <span className="font-semibold">User</span>
+                    <span className="block text-sm text-gray-400">
+                      Premium Member
+                    </span>
+                  </div> */}
+                  <button
+                    className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      navigate("/login");
+                      window.location.reload();
+                    }}
+                  >
+                    🚪 Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex gap-3">
+              <Link to="/register" className="register-btn">
+                Register
+              </Link>
+              <Link to="/login" className="login-btn">
+                Login
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
     </header>
   );
 }

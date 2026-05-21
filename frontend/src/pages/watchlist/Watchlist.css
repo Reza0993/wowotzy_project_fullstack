@@ -1,1 +1,267 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
 @import "tailwindcss";
+/* =========================
+   PAGE
+========================= */
+
+.watchlist-page {
+  @apply min-h-screen text-white pb-32;
+
+  background:
+    radial-gradient(circle at top, rgba(255, 0, 85, 0.12), transparent 30%),
+    linear-gradient(to bottom, #120204, #050505);
+}
+
+.watchlist-container {
+  @apply pt-28 px-5 md:px-10;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.watchlist-header {
+  @apply flex items-center gap-4 mb-10;
+}
+
+.watchlist-title {
+  @apply text-3xl md:text-4xl font-bold;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.watchlist-section {
+  @apply flex items-center justify-between mb-6;
+}
+
+.section-left {
+  @apply flex items-center gap-3;
+}
+
+.section-title {
+  @apply text-xl font-semibold;
+}
+
+.section-line {
+  @apply rounded-full;
+
+  width: 5px;
+  height: 32px;
+
+  background: #ff004f;
+
+  box-shadow: 0 0 12px rgba(255, 0, 79, 0.7);
+}
+
+.section-line.small {
+  width: 4px;
+  height: 22px;
+}
+
+.lihat-semua-btn {
+  @apply px-5 py-2 rounded-full text-sm font-medium transition-all duration-300;
+
+  background: rgba(255, 0, 79, 0.08);
+
+  border: 1px solid rgba(255, 0, 79, 0.2);
+
+  color: #ff336f;
+}
+
+.lihat-semua-btn:hover {
+  background: rgba(255, 0, 79, 0.18);
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 0 18px rgba(255, 0, 79, 0.25);
+}
+
+/* =========================
+   GRID
+========================= */
+
+.movie-grid {
+  @apply grid gap-7;
+
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+
+/* =========================
+   CARD
+========================= */
+
+.movie-card {
+  @apply overflow-hidden rounded-[22px];
+
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-8px);
+
+  box-shadow:
+    0 12px 30px rgba(255, 0, 79, 0.15),
+    0 0 20px rgba(255, 0, 79, 0.08);
+}
+
+/* =========================
+   IMAGE
+========================= */
+
+.movie-image-wrapper {
+  @apply relative overflow-hidden;
+
+  height: 330px;
+}
+
+.movie-image {
+  @apply w-full h-full object-cover;
+
+  transition: transform 0.5s ease;
+}
+
+.movie-card:hover .movie-image {
+  transform: scale(1.08);
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.movie-overlay {
+  @apply absolute inset-0 flex items-center justify-center;
+
+  opacity: 0;
+
+  transition: all 0.3s ease;
+
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.45));
+
+  backdrop-filter: blur(2px);
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+.movie-card:hover .movie-overlay {
+  opacity: 1;
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.movie-content {
+  @apply p-4;
+}
+
+.movie-title {
+  @apply text-lg font-bold truncate;
+}
+
+.movie-description {
+  @apply text-sm text-gray-400 mt-2 leading-relaxed line-clamp-2;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.delete-btn {
+  @apply px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-300;
+
+  background: #ff004f;
+}
+
+.delete-btn:hover {
+  background: #ff2e6d;
+
+  transform: scale(1.05);
+
+  box-shadow: 0 0 18px rgba(255, 0, 79, 0.45);
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty-watchlist {
+  @apply flex items-center justify-center h-[300px] text-gray-500 text-base;
+}
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090909;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff004f;
+
+  border-radius: 999px;
+}
+
+.play-text {
+  @apply text-white font-semibold text-lg;
+
+  transform: translateY(10px);
+
+  transition: all 0.3s ease;
+
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+}
+
+.movie-card:hover .play-text {
+  transform: translateY(0);
+
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+  .movie-grid {
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 18px;
+  }
+
+  .movie-image-wrapper {
+    height: 250px;
+  }
+}
+
+@media (max-width: 500px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .watchlist-section {
+    @apply flex-col items-start gap-4;
+  }
+
+  .movie-image-wrapper {
+    height: 300px;
+  }
+}
