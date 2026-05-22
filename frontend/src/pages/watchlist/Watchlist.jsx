@@ -53,13 +53,13 @@ function Watchlist() {
           <h1 className="watchlist-title">Daftar Saya</h1>
         </div>
 
-        <div className="watchlist-section">
+        {/* <div className="watchlist-section">
           <div className="section-left">
             <div className="section-line small"></div>
 
             <h2 className="section-title">Film Watchlist</h2>
           </div>
-        </div>
+        </div> */}
 
         {watchlist.length > 0 ? (
           <div className="movie-grid">

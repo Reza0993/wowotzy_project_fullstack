@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 import API from "../../services/api";
 
@@ -11,8 +11,11 @@ import "./DetailFilm.css";
 function DetailFilm() {
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   const [movie, setMovie] = useState(null);
   const [saved, setSaved] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     getDetailMovie();
@@ -27,9 +30,13 @@ function DetailFilm() {
       console.log(error);
     }
   }
+
   async function checkWatchlist() {
     try {
       const token = localStorage.getItem("token");
+
+      // kalau belum login skip
+      if (!token) return;
 
       const response = await API.get("/api/watchlist", {
         headers: {
@@ -44,10 +51,17 @@ function DetailFilm() {
       console.log(error);
     }
   }
-  async function toggleWatchlist() {
-    try {
-      const token = localStorage.getItem("token");
 
+  async function toggleWatchlist() {
+    const token = localStorage.getItem("token");
+
+    // Jika belum login
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    try {
       if (!saved) {
         await API.post(
           "/api/watchlist",
@@ -205,6 +219,38 @@ function DetailFilm() {
           </div>
         </div>
       </div>
+
+      {/* LOGIN MODAL */}
+      {showLoginModal && (
+        <div className="login-modal-overlay">
+          <div className="login-modal">
+            <div className="login-modal-icon">🔒</div>
+
+            <h2 className="login-modal-title">Login Diperlukan</h2>
+
+            <p className="login-modal-text">
+              Kamu harus login terlebih dahulu untuk menyimpan film ke
+              watchlist.
+            </p>
+
+            <div className="login-modal-actions">
+              <button
+                className="modal-cancel-btn"
+                onClick={() => setShowLoginModal(false)}
+              >
+                Nanti Saja
+              </button>
+
+              <button
+                className="modal-login-btn"
+                onClick={() => navigate("/login")}
+              >
+                Login Sekarang
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>
