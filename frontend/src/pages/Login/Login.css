@@ -1,0 +1,222 @@
+.cinema-login-page {
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+    to right,
+    #090909,
+    #1a0008
+  );
+}
+
+/* OVERLAY */
+.cinema-overlay {
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(255, 0, 85, 0.12),
+      transparent 45%
+    );
+}
+
+/* BACK BUTTON */
+.cinema-back-btn {
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  padding: 10px 16px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.08);
+
+  color: white;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  z-index: 10;
+
+  transition: 0.3s;
+}
+
+.cinema-back-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* CONTAINER */
+.cinema-container {
+  position: relative;
+  z-index: 2;
+
+  text-align: center;
+}
+
+/* LOGO */
+.cinema-logo h1 {
+  color: #ffb3c1;
+
+  font-size: 72px;
+  font-weight: 800;
+
+  margin-bottom: 8px;
+}
+
+.cinema-logo p {
+  color: #bdbdbd;
+
+  margin-bottom: 30px;
+
+  font-size: 16px;
+}
+
+/* CARD */
+.cinema-card {
+  width: 420px;
+
+  padding: 35px;
+
+  border-radius: 18px;
+
+  background: rgba(15, 0, 8, 0.95);
+
+  box-shadow:
+    0 0 30px rgba(255, 0, 85, 0.08);
+}
+
+/* INPUT GROUP */
+.cinema-input-group {
+  text-align: left;
+
+  margin-bottom: 20px;
+}
+
+.cinema-input-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* PASSWORD TOP */
+.password-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 8px;
+}
+
+.password-top a {
+  color: #ff7a9c;
+
+  text-decoration: none;
+
+  font-size: 12px;
+}
+
+/* INPUT */
+.cinema-input {
+  display: flex;
+  align-items: center;
+
+  background: #eadde1;
+
+  border-radius: 12px;
+
+  padding: 0 14px;
+}
+
+.cinema-input span {
+  color: #999;
+  font-size: 14px;
+}
+
+.cinema-input input {
+  width: 100%;
+
+  padding: 15px 12px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-size: 14px;
+}
+
+/* BUTTON */
+.cinema-login-btn {
+  width: 100%;
+
+  margin-top: 10px;
+
+  padding: 15px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    to right,
+    #ff1744,
+    #ff0055
+  );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.cinema-login-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 20px rgba(255, 0, 85, 0.2);
+}
+
+/* LINE */
+.cinema-line {
+  width: 100%;
+  height: 1px;
+
+  background: rgba(255,255,255,0.1);
+
+  margin: 25px 0;
+}
+
+/* FOOTER */
+.cinema-footer {
+  color: #bdbdbd;
+  font-size: 14px;
+}
+
+.cinema-footer a {
+  color: #ff7a9c;
+
+  text-decoration: none;
+  font-weight: 600;
+}
