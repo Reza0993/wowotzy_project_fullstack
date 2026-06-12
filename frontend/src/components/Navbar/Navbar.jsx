@@ -2,43 +2,70 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
-function Navbar({
-  searchQuery,
-  setSearchQuery,
-  onScrollTo,
-  onTriggerToast,
-  //isLoggedIn,
-}) {
+function Navbar({ searchQuery, setSearchQuery, onScrollTo, onTriggerToast }) {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [username, setUsername] = useState(null); // <-- new
 
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
-  const isLoggedIn = !!localStorage.getItem("token");
+  const token = localStorage.getItem("authToken");
+  const isLoggedIn = !!token;
 
-  // Efek transisi mengecilkan navbar saat digulir (Scroll Shrink)
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 30);
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
-        setSearchExpanded(false);
-      }
+      if (window.innerWidth <= 768) setSearchExpanded(false);
     };
-
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // Fetch profile when logged in
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchProfile = async () => {
+      const token = localStorage.getItem("authToken");
+
+      if (!token) return;
+
+      try {
+        const res = await fetch("http://localhost:3000/api/auth/profile", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await res.json();
+
+        if (mounted && data.success) {
+          setUsername(data.data.username);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchProfile();
+
+    return () => {
+      mounted = false;
+    };
+  }, [isLoggedIn]);
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    setUsername(null);
+    setDropdownOpen(false);
+    navigate("/");
+  };
 
   return (
     <header className={`navbar ${scrolled ? "scrolled" : ""}`}>
@@ -183,18 +210,19 @@ function Navbar({
             {dropdownOpen && (
               <div className="profile-dropdown absolute right-0 mt-2 w-48 bg-[#1a080a]/90 text-white rounded-md shadow-lg">
                 <div className="dropdown-header p-3 border-b border-gray-700">
-                  <span className="font-semibold">User</span>
-                  <span className="block text-sm text-gray-400">
-                    Premium Member
-                  </span>
+                  <div className="flex flex-col">
+                    <span className="font-semibold truncate">
+                      {username || "User"}
+                    </span>
+
+                    <span className="text-sm text-gray-400">
+                      Premium Member
+                    </span>
+                  </div>
                 </div>
                 <button
                   className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
-                  onClick={() => {
-                    localStorage.removeItem("token"); // hapus token
-                    navigate("/"); // redirect ke login
-                    window.location.reload(); // refresh agar Navbar update
-                  }}
+                  onClick={handleLogout}
                 >
                   Logout
                 </button>
@@ -285,7 +313,7 @@ function Navbar({
                   <button
                     className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
                     onClick={() => {
-                      localStorage.removeItem("token");
+                      localStorage.removeItem("authToken");
                       navigate("/login");
                       window.location.reload();
                     }}
