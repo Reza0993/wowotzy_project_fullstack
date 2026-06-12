@@ -33,7 +33,7 @@ function DetailFilm() {
 
   async function checkWatchlist() {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
 
       // kalau belum login skip
       if (!token) return;
@@ -53,7 +53,7 @@ function DetailFilm() {
   }
 
   async function toggleWatchlist() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
 
     // Jika belum login
     if (!token) {

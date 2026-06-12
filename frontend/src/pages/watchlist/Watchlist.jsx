@@ -16,7 +16,7 @@ function Watchlist() {
 
   const fetchWatchlist = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("authToken");
 
       const res = await API.get("/api/watchlist", {
         headers: {

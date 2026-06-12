@@ -7,7 +7,7 @@ export default function History() {
   const [loading, setLoading] = useState(true);
 
   const loadHistory = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
 
     if (!token) {
       setLoading(false);
@@ -34,7 +34,7 @@ export default function History() {
   };
 
   const deleteHistory = async (id) => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("authToken");
 
     if (!window.confirm("Hapus history ini?")) return;
 

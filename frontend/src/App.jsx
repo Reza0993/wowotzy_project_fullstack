@@ -5,6 +5,7 @@ import Watchlist from "./pages/watchlist/Watchlist";
 import SeeAll from "./pages/SeeAll/SeeAll";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
+import History from "./pages/History/history";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/see-all" element={<SeeAll />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/history" element={<History />} />
     </Routes>
   );
 }
