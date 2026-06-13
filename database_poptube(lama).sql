@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 13 Jun 2026 pada 04.20
+-- Waktu pembuatan: 24 Apr 2026 pada 09.32
 -- Versi server: 10.4.32-MariaDB
 -- Versi PHP: 8.2.12
 
@@ -40,9 +40,7 @@ CREATE TABLE `comments` (
 --
 
 INSERT INTO `comments` (`id_comment`, `id_user`, `id_film`, `komentar`, `tanggal`) VALUES
-(1, 1, 1, 'lucu', '2026-04-22 20:59:23'),
-(2, 1, 1, 'film ini bagus banget', '2026-05-02 22:14:49'),
-(3, 1, 1, 'aku suka banget film ini', '2026-05-02 22:23:07');
+(1, 1, 1, 'lucu', '2026-04-22 20:59:23');
 
 -- --------------------------------------------------------
 
@@ -56,20 +54,27 @@ CREATE TABLE `films` (
   `deskripsi` text NOT NULL,
   `video_url` varchar(255) NOT NULL,
   `foto_url` varchar(255) DEFAULT NULL,
-  `id_admin` int(11) NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp()
+  `id_admin` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `films`
 --
 
-INSERT INTO `films` (`id_film`, `judul`, `deskripsi`, `video_url`, `foto_url`, `id_admin`, `created_at`) VALUES
-(1, 'Hopper 1', 'Seorang anak yang ingin melindungi rumah hewan', 'https://youtu.be/PypDSyIRRSs?si=J1ibDklKfQ_yprDX', 'https://upload.wikimedia.org/wikipedia/id/thumb/6/6c/Hoppers_film_poster.jpg/250px-Hoppers_film_poster.jpg', 2, '2026-06-13 07:45:20'),
-(2, 'Spider-Man: Brand New Day', 'Spider-Man: Brand New Day\', starring Tom Holland and directed by Destin Daniel Cretton, swings into theatres on July 31, 2026', 'https://youtu.be/8TZMtslA3UY?si=75-cFPYZGz8kQjOW', '1779177990013-431534896.jpg', 2, '2026-06-13 07:45:20'),
-(8, 'Cars 3', 'Cars 3 adalah sebuah film komedi animasi komputer 3D Amerika yang diproduksi oleh Pixar Animation Studios dan dirilis oleh Walt Disney Pictures. Film tersebut merupakan sebuah sekuel dari Cars (2006) dan Cars 2 (2011), dan installment ketiga dari waralaba Cars dan dirilis di Amerika Serikat pada 16 Juni 2017 dan di Indonesia pada tanggal 16 Agustus 2017', 'https://youtu.be/2LeOH9AGJQM?si=j0cDNdb_lksI3lXi', 'https://m.media-amazon.com/images/S/pv-target-images/28be214173680f89b107908bae047d6787d8f884e670ca6af93886b1a360dfa1.jpg', 2, '2026-06-13 07:45:20'),
-(9, 'amba', 'seseorang hitam yang menjelajah', 'https://www.disney.id/movies/hoppers', '1777631963841-354160248.jpg', 2, '2026-06-13 07:45:20'),
-(10, 'Interstellar', 'When Earth becomes uninhabitable, a team of explorers travels through a wormhole in space in an attempt to ensure humanity\'s survival.', 'https://youtu.be/zSWdZVtXT7E', '1779173901839-795912854.jpg', 2, '2026-06-13 07:45:20');
+INSERT INTO `films` (`id_film`, `judul`, `deskripsi`, `video_url`, `foto_url`, `id_admin`) VALUES
+(1, 'Hoppers', 'Seorang anak perempuan yang ingin melindungi hewan peliharaan kesayangannya menemukan cara luar biasa untuk mentransfer pikirannya ke dalam robot hewan robotik.', 'https://youtu.be/39-Z10yK6Zk', 'https://image.tmdb.org/t/p/w500/y69sWw43lK1s49y083L275yO8hG.jpg', 2),
+(2, 'Spider-Man: Brand New Day', '\'Spider-Man: Brand New Day\', dibintangi oleh Tom Holland dan disutradarai oleh Destin Daniel Cretton, berayun megah di bioskop kesayangan Anda.', 'https://youtu.be/R6MlUcmO1Mc', 'https://image.tmdb.org/t/p/w500/uKVwA4sQ5N95B14k51wLnd64IP1.jpg', 1),
+(5, 'Cars 3', 'Lightning McQueen tiba-tiba terdorong keluar dari olahraga yang dicintainya oleh generasi pembalap baru yang sangat cepat. Untuk kembali beraksi, dia membutuhkan bantuan teknisi balap muda yang bersemangat.', 'https://youtu.be/aqz-KE-wJNw', 'https://image.tmdb.org/t/p/w500/a1J65VO945IQ69lO24d2tIAi4go.jpg', 2),
+(7, 'Cars', 'Pembalap pemula yang ambisius, Lightning McQueen, tersesat di kota tua terpencil bernama Radiator Springs, di mana dia akhirnya menemukan arti sejati dari persahabatan, ketulusan, dan cinta.', 'https://youtu.be/SkVqJ1SGeL0', 'https://image.tmdb.org/t/p/w500/qi6Q07Gh11er476oBD4glOMclUi.jpg', 2),
+(8, 'Coco', 'Miguel yang bermimpi menjadi musisi legendaris terpaksa bertualang ke Negeri Orang Mati yang menakjubkan dan penuh warna untuk mengungkap misteri sejarah leluhur keluarganya.', 'https://youtu.be/d193tV0zY9k', 'https://image.tmdb.org/t/p/w500/gGE2eBZ1wlh42IM6HYvQ3jP25CM.jpg', 2),
+(9, 'Avatar: The Way of Water', 'Jake Sully lives with his newfound family formed on the extrasolar moon Pandora. Once a familiar threat returns to finish what was previously started, Jake must work with Neytiri and the army of the Na\'vi race to protect their home.', 'https://youtu.be/eRsGy9On1z0', 'https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60QsSmeqb61Se4.jpg', 1),
+(10, 'Interstellar', 'When Earth becomes uninhabitable, a team of explorers travels through a wormhole in space in an attempt to ensure humanity\'s survival.', 'https://youtu.be/Y-g0y5gdV34', 'https://image.tmdb.org/t/p/w500/gEU2QpI6EIt7t8S3d8n9nE8Yj4q.jpg', 1),
+(11, 'Your Name', 'Two strangers find themselves linked in a bizarre way. When a connection is formed, will distance be the only thing to keep them apart?', 'https://youtu.be/3KR8_M-G9pA', 'https://image.tmdb.org/t/p/w500/q719jXXEz3Yt3Ff8zK5P7p1U4yP.jpg', 1),
+(12, 'Demon Slayer: Mugen Train', 'After a string of mysterious disappearance aboard a train, the Demon Slayer Corps sends Tanjiro, Nezuko, Zenitsu, and Inosuke to assist the Flame Hashira Kyojuro Rengoku in defeating a powerful demon.', 'https://youtu.be/mN0zPOpEPis', 'https://image.tmdb.org/t/p/w500/h8Rb9qYdJpP9oW32QJ1E256j617.jpg', 1),
+(13, 'Suzume', 'A modern action-adventure road story where a 17-year-old girl named Suzume helps a mysterious young man close mystical doors causing disasters all across Japan.', 'https://youtu.be/F7nQ0VUAOXg', 'https://image.tmdb.org/t/p/w500/kC599gcozzo592et7sWz75mJ7G6.jpg', 1),
+(14, 'John Wick: Chapter 4', 'John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe.', 'https://youtu.be/qEVUardgAvo', 'https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg', 1),
+(15, 'Joker', 'During the 1980s, a failed stand-up comedian Arthur Fleck driven insane turns to a life of crime and chaos in Gotham City while becoming an infamous psychopathic crime figure.', 'https://youtu.be/zAGVQLHvyOY', 'https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg', 1),
+(16, 'Spider-Man: Into the Spider-Verse', 'Teen Miles Morales becomes the Spider-Man of his universe, and must join with five spider-powered individuals from other dimensions to stop a threat for all realities.', 'https://youtu.be/g4HbzQFUp3Y', 'https://image.tmdb.org/t/p/w500/ldFmOcSGW8eZFSjIHjtj36t4gSY.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -81,16 +86,15 @@ CREATE TABLE `history` (
   `id_history` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id_film` int(11) NOT NULL,
-  `waktu_nonton` datetime DEFAULT current_timestamp(),
-  `watch_time_seconds` int(11) DEFAULT 0
+  `waktu_nonton` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `history`
 --
 
-INSERT INTO `history` (`id_history`, `id_user`, `id_film`, `waktu_nonton`, `watch_time_seconds`) VALUES
-(1, 1, 1, '2026-04-22 21:11:34', 0);
+INSERT INTO `history` (`id_history`, `id_user`, `id_film`, `waktu_nonton`) VALUES
+(1, 1, 1, '2026-04-22 21:11:34');
 
 -- --------------------------------------------------------
 
@@ -103,22 +107,16 @@ CREATE TABLE `users` (
   `username` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `role` varchar(20) DEFAULT 'user',
-  `created_at` datetime DEFAULT current_timestamp()
+  `role` varchar(20) DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `users`
 --
 
-INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role`, `created_at`) VALUES
-(1, 'Mamat', 'mamatganteng@gmail.com', '1234', 'user', '2026-06-13 07:45:20'),
-(2, 'ujang', 'ujanggarut@gmail.com', '1234', 'admin', '2026-06-13 07:45:20'),
-(3, 'reza', 'reza@gmail.com', '1234', 'admin', '2026-06-13 07:45:20'),
-(4, 'lutfi', 'lutfi@gmail.com', '12345', 'user', '2026-06-13 07:45:20'),
-(5, 'admin', 'admin@gmail.com', '12345', 'admin', '2026-06-13 07:45:20'),
-(6, 'UjangGarut', 'ujang@gmail.com', '$2b$10$R4ATgCuAtanLlD0iwyPUm.wpTSONaKG9TY/yFC8EzVx4ZsOBWuSsi', 'user', '2026-06-13 07:45:20'),
-(7, 'BaksoBotak', 'botak@gmail.com', '$2b$10$3nOo8BqiMH6XJdgUnqhUMuznQn6zMSIhjAOaEU2K/k2KRnHdzkZpG', 'user', '2026-06-13 08:31:19');
+INSERT INTO `users` (`id_user`, `username`, `email`, `password`, `role`) VALUES
+(1, 'Mamat', 'mamatganteng@gmail.com', '1234', 'user'),
+(2, 'ujang', 'ujanggarut@gmail.com', '1234', 'admin');
 
 -- --------------------------------------------------------
 
@@ -138,13 +136,7 @@ CREATE TABLE `watchlist` (
 --
 
 INSERT INTO `watchlist` (`id_watchlist`, `id_user`, `id_film`, `tanggal_tambah`) VALUES
-(10, 1, 10, '2026-05-19 21:01:59'),
-(12, 1, 1, '2026-05-21 10:18:41'),
-(13, 1, 2, '2026-06-05 14:36:27'),
-(14, 5, 1, '2026-06-12 09:55:19'),
-(16, 6, 2, '2026-06-12 14:24:36'),
-(17, 6, 1, '2026-06-12 14:24:44'),
-(18, 6, 8, '2026-06-12 14:27:25');
+(1, 1, 1, '2026-04-15 17:39:54');
 
 --
 -- Indexes for dumped tables
@@ -196,13 +188,13 @@ ALTER TABLE `watchlist`
 -- AUTO_INCREMENT untuk tabel `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id_comment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_comment` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `films`
 --
 ALTER TABLE `films`
-  MODIFY `id_film` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_film` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT untuk tabel `history`
@@ -214,13 +206,13 @@ ALTER TABLE `history`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT untuk tabel `watchlist`
 --
 ALTER TABLE `watchlist`
-  MODIFY `id_watchlist` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_watchlist` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

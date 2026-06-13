@@ -8,6 +8,7 @@ function Navbar({ searchQuery, setSearchQuery, onScrollTo, onTriggerToast }) {
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [username, setUsername] = useState(null); // <-- new
+  const [role, setRole] = useState(null);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,6 +49,7 @@ function Navbar({ searchQuery, setSearchQuery, onScrollTo, onTriggerToast }) {
 
         if (mounted && data.success) {
           setUsername(data.data.username);
+          setRole(data.data.role);
         }
       } catch (err) {
         console.error(err);
@@ -60,9 +62,11 @@ function Navbar({ searchQuery, setSearchQuery, onScrollTo, onTriggerToast }) {
       mounted = false;
     };
   }, [isLoggedIn]);
+
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     setUsername(null);
+    setRole(null);
     setDropdownOpen(false);
     navigate("/");
   };
@@ -214,12 +218,29 @@ function Navbar({ searchQuery, setSearchQuery, onScrollTo, onTriggerToast }) {
                     <span className="font-semibold truncate">
                       {username || "User"}
                     </span>
-
                     <span className="text-sm text-gray-400">
                       Premium Member
                     </span>
                   </div>
                 </div>
+                <button
+                  className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
+                  onClick={() => {
+                    navigate("/Profile");
+                  }}
+                >
+                  Profile
+                </button>
+                {role === "admin" && (
+                  <button
+                    className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
+                    onClick={() => {
+                      navigate("/DasboardAdmin");
+                    }}
+                  >
+                    Dashboard
+                  </button>
+                )}
                 <button
                   className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
                   onClick={handleLogout}

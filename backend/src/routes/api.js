@@ -8,6 +8,7 @@ const WatchlistController = require("../controllers/WatchlistController");
 const HistoryController = require("../controllers/HistoryController");
 const CommentController = require("../controllers/CommentController");
 const UserController = require("../controllers/UserController");
+const StatsController = require("../controllers/StatsController");
 
 router.get("/users", UserController.index);
 router.get("/users/:id", UserController.show);
@@ -35,5 +36,9 @@ router.delete("/history/:id", authMiddleware, HistoryController.delete);
 // ✅ Rute Komentar (Melihat bersifat publik, Mengirim dilindungi JWT)
 router.get("/comments/:id", CommentController.getComments);
 router.post("/comments", authMiddleware, CommentController.addComment);
+
+// di bagian atas: const StatsController = require("../controllers/StatsController");
+router.get("/stats", authMiddleware, StatsController.index);
+router.get("/activities", authMiddleware, StatsController.activities);
 
 module.exports = router;
