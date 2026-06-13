@@ -116,6 +116,56 @@ class AuthController {
     }
   }
 
+  // UPDATE PROFILE
+  async updateProfile(req, res) {
+    try {
+      const userId = req.user.id;
+      const { username, email, password } = req.body;
+
+      if (!username && !email && !password) {
+        return errorHandler(res, "Tidak ada data yang diubah", 400);
+      }
+
+      const updateData = {};
+      if (username) {
+        if (username.length < 3) {
+          return errorHandler(res, "Username minimal 3 karakter", 400);
+        }
+        updateData.username = username;
+      }
+
+      if (email) {
+        if (!email.includes("@")) {
+          return errorHandler(res, "Email tidak valid", 400);
+        }
+        const existingUser = await User.findByEmail(email);
+        if (existingUser && existingUser.id_user !== userId) {
+          return errorHandler(res, "Email sudah terdaftar", 400);
+        }
+        updateData.email = email;
+      }
+
+      if (password) {
+        if (password.length < 4) {
+          return errorHandler(res, "Password minimal 4 karakter", 400);
+        }
+        updateData.password = await bcrypt.hash(password, 10);
+      }
+
+      await User.update(userId, updateData);
+
+      const updatedUser = await User.find(userId);
+
+      res.status(200).json({
+        success: true,
+        message: "Profil berhasil diperbarui",
+        data: updatedUser,
+      });
+    } catch (error) {
+      return errorHandler(res, error);
+    }
+  }
+
   // LOGOUT
   async logout(req, res) {
     res.status(200).json({

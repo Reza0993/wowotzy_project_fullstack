@@ -20,6 +20,7 @@ function DetailFilm() {
   useEffect(() => {
     getDetailMovie();
     checkWatchlist();
+    recordHistory();
   }, []);
 
   async function getDetailMovie() {
@@ -49,6 +50,25 @@ function DetailFilm() {
       setSaved(isSaved);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function recordHistory() {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) return;
+
+      await API.post(
+        "/api/history",
+        { id_film: id },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.log("Failed to record history:", error);
     }
   }
 

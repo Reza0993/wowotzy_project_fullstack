@@ -6,8 +6,7 @@ import API from "../../services/api";
 import Navbar from "../../components/Navbar/Navbar";
 import Hero from "../../components/Hero/Hero";
 import MovieRow from "../../components/MovieRow/MovieRow";
-import BottomNav from "../../components/BottomNav/BottomNav";
-
+import Footer from "../../components/Footer/Footer";
 import "./Home.css";
 
 function Home() {
@@ -135,13 +134,7 @@ function Home() {
           </>
         )}
       </div>
-
-      <BottomNav
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onScrollTo={scrollToSection}
-        onTriggerToast={triggerToast}
-      />
+      <Footer />
     </div>
   );
 }

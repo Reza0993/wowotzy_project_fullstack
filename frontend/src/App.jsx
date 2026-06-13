@@ -7,6 +7,8 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import History from "./pages/History/history";
 import Dasboard from "./pages/DasboardAdmin/Dasboard/Dasboard";
+import Profile from "./pages/Profile/Profile";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/history" element={<History />} />
       <Route path="/DasboardAdmin" element={<Dasboard />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/edit-profile" element={<EditProfile />} />
     </Routes>
   );
 }

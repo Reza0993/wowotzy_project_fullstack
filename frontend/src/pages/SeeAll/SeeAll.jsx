@@ -4,7 +4,6 @@ import API from "../../services/api";
 import Navbar from "../../components/Navbar/Navbar";
 import Footer from "../../components/Footer/Footer";
 import MovieCard from "../../components/Moviecard/Moviecard";
-import BottomNav from "../../components/BottomNav/BottomNav";
 import "./SeeAll.css";
 
 const MOCK_MOVIES = [
@@ -888,7 +887,6 @@ function SeeAll() {
         )}
       </div>
 
-      <BottomNav onTriggerToast={triggerToast} />
       <Footer />
     </div>
   );

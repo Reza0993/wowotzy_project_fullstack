@@ -29,10 +29,10 @@ class History {
   static create(data) {
     return new Promise((resolve, reject) => {
       const sql =
-        "INSERT INTO history (id_history, id_user, id_film) VALUES (?,?,?)";
+        "INSERT INTO history (id_user, id_film) VALUES (?,?)";
       db.query(
         sql,
-        [data.id_history, data.id_user, data.id_film],
+        [data.id_user, data.id_film],
         (err, results) => {
           if (err) reject(err);
           resolve(results);

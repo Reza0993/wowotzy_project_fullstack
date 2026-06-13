@@ -11,7 +11,7 @@
   margin-top: -45px;
   position: relative;
   z-index: 10;
-  padding-bottom: 180px; /* ✅ Ditambah ke 180px agar baris film paling bawah tidak tertutup BottomNav */
+  padding-bottom: 45px;
 }
 
 /* Premium Glassmorphic Toast Notification */
