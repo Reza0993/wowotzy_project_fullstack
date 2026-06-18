@@ -1,0 +1,543 @@
+:root {
+  --accent: #ff1e42;
+
+  --bg: #f4f4f4;
+
+  --card:
+    radial-gradient(circle at top, rgba(255, 0, 85, 0.12), transparent 30%),
+    linear-gradient(to bottom, #120204, #050505);
+
+  --card-secondary:
+    radial-gradient(
+      circle at top right,
+      rgba(255, 0, 85, 0.08),
+      transparent 40%
+    ),
+    linear-gradient(to bottom, #1a0307, #080808);
+
+  --text-main: #f8fafc;
+  --text-secondary: #b4b4b4;
+  --text-title: #0a0506;
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================
+   Layout
+========================== */
+
+.pageContainer {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f4f4;
+}
+
+.mainContent {
+  flex: 1;
+  padding: 24px;
+  overflow-x: hidden;
+  background: #f4f4f4;
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: 16px;
+  }
+}
+
+/* ==========================
+   Typography
+========================== */
+
+.textMain {
+  color: var(--text-main);
+}
+
+.textSecondary {
+  color: var(--text-secondary);
+}
+
+.pageTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-title);
+}
+
+.pageSubtitle {
+  margin-top: 4px;
+  color: var(--text-title);
+}
+
+/* ==========================
+   Header
+========================== */
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 768px) {
+  .headerSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ==========================
+   Add Button
+========================== */
+
+.addButton {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.addButton:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .addButton {
+    width: 100%;
+  }
+}
+
+/* ==========================
+   Stats
+========================== */
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.statCard {
+  background: var(--card);
+
+  border-radius: 20px;
+  padding: 24px;
+
+  box-shadow: var(--shadow);
+
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background: var(--accent);
+}
+
+.statCard span {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.statCard h3 {
+  color: white;
+  font-size: 2rem;
+  margin-top: 8px;
+  font-weight: 700;
+}
+
+/* ==========================
+   Table
+========================== */
+
+.tableWrapper {
+  background: var(--card);
+
+  border-radius: 24px;
+
+  overflow-x: auto;
+
+  box-shadow: var(--shadow);
+
+  padding: 12px;
+}
+
+table {
+  width: 100%;
+  min-width: 950px;
+  border-collapse: collapse;
+}
+
+thead {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+thead th {
+  padding: 16px;
+  text-align: left;
+  color: #d4d4d4;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+tbody td {
+  padding: 16px;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tableRow {
+  transition: 0.2s ease;
+}
+
+.tableRow:hover {
+  background: rgba(255, 30, 66, 0.08);
+}
+
+/* ==========================
+   Poster
+========================== */
+
+.poster {
+  width: 80px;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 768px) {
+  .poster {
+    width: 60px;
+    height: 85px;
+  }
+}
+
+/* ==========================
+   Action Buttons
+========================== */
+
+.editBtn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.editBtn:hover {
+  background: #1d4ed8;
+}
+
+.deleteBtn {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.deleteBtn:hover {
+  background: #b91c1c;
+}
+
+/* ==========================
+   Modal
+========================== */
+
+.modalOverlay {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(5px);
+  padding: 16px;
+}
+
+.card {
+  background: linear-gradient(180deg, #170206 0%, #090909 100%);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 24px;
+
+  padding: 32px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 20px;
+  }
+}
+
+.closeBtn {
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  background: rgba(255, 255, 255, 0.03);
+
+  color: white;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 30, 66, 0.15);
+
+  border-color: var(--accent);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+/* ==========================
+   Inputs
+========================== */
+
+.modalInput {
+  background: rgba(255, 255, 255, 0.03);
+
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 14px;
+
+  padding: 14px 16px;
+
+  font-size: 15px;
+
+  transition: 0.25s;
+}
+
+.modalInput:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.modalInput:focus {
+  border-color: #ff1e42;
+
+  background: rgba(255, 255, 255, 0.05);
+
+  box-shadow: 0 0 0 4px rgba(255, 30, 66, 0.12);
+}
+.modalInput::placeholder {
+  color: #777;
+}
+
+textarea.modalInput {
+  min-height: 140px;
+}
+
+.uploadArea {
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.uploadArea:hover {
+  border-color: var(--accent);
+
+  background: rgba(255, 30, 66, 0.05);
+}
+
+.previewImage {
+  width: 180px;
+
+  height: 260px;
+
+  object-fit: cover;
+
+  border-radius: 16px;
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+/* ==========================
+   Accent Button
+========================== */
+
+.btnAccent {
+  background: var(--accent);
+  color: white;
+  transition: 0.25s ease;
+}
+
+.btnAccent:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* ==========================
+   Scrollbar
+========================== */
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.statCard::before,
+.tableWrapper::before,
+.card::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  /* background: var(--accent); */
+
+  z-index: 1;
+}
+
+/* ==========================
+   Footer Button
+========================== */
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 32px;
+  padding-top: 24px;
+
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cancelBtn {
+  min-width: 120px;
+
+  padding: 12px 22px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  background: rgba(255, 255, 255, 0.03);
+
+  color: #d1d5db;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+
+  border-color: rgba(255, 255, 255, 0.25);
+
+  color: white;
+}
+
+.saveBtn {
+  min-width: 180px;
+
+  padding: 12px 24px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #ff1e42 0%, #ff385f 100%);
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(255, 30, 66, 0.35);
+
+  transition: all 0.25s ease;
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 14px 35px rgba(255, 30, 66, 0.45);
+}
+
+.saveBtn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .modalFooter {
+    flex-direction: column-reverse;
+  }
+
+  .cancelBtn,
+  .saveBtn {
+    width: 100%;
+  }
+}

@@ -19,34 +19,35 @@ class FilmController {
     }
   }
 
-
   // GET DETAIL FILM
-async show(req, res) {
-  try {
-    const id = req.params.id;
+  async show(req, res) {
+    try {
+      const id = req.params.id;
 
-    if (isNaN(id)) {
-      return errorHandler(res, "ID harus berupa angka", 400);
+      if (isNaN(id)) {
+        return errorHandler(res, "ID harus berupa angka", 400);
+      }
+
+      const film = await Film.find(id);
+
+      if (!film) {
+        return errorHandler(res, "Film tidak ditemukan", 404);
+      }
+
+      res.status(200).json({
+        success: true,
+        data: film,
+      });
+    } catch (error) {
+      return errorHandler(res, error);
     }
-
-    const film = await Film.find(id);
-
-    if (!film) {
-      return errorHandler(res, "Film tidak ditemukan", 404);
-    }
-
-    res.status(200).json({
-      success: true,
-      data: film,
-    });
-  } catch (error) {
-    return errorHandler(res, error);
   }
-}
-
 
   // CREATE + UPLOAD FILE
   async store(req, res) {
+    // console.log("REQ.USER =", req.user);
+    // console.log("REQ.USER ID =", req.user?.id);
+    // console.log("REQ.USER ID_USER =", req.user?.id_user);
     try {
       // VALIDASI BODY
       const errors = await validateFilm(req.body, req.file);
@@ -63,8 +64,11 @@ async show(req, res) {
 
       // ✅ GABUNG DATA
       const data = {
-        ...req.body,
+        judul: req.body.judul,
+        deskripsi: req.body.deskripsi,
+        video_url: req.body.video_url,
         foto_url: image,
+        id_admin: req.user.id,
       };
 
       const film = await Film.create(data);
@@ -77,6 +81,9 @@ async show(req, res) {
     } catch (error) {
       return errorHandler(res, error);
     }
+
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
   }
 
   // UPDATE + OPSIONAL UPDATE FILE
@@ -102,8 +109,11 @@ async show(req, res) {
       }
 
       const data = {
-        ...req.body,
+        judul: req.body.judul,
+        deskripsi: req.body.deskripsi,
+        video_url: req.body.video_url,
         foto_url: image,
+        id_admin: req.user.id,
       };
 
       // Hapus properti 'image' agar tidak bentrok dengan kolom database

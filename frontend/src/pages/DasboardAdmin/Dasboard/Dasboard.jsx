@@ -16,7 +16,9 @@ import {
 } from "chart.js";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import "./Dasboard.css";
+
+// 1. PERBAIKAN IMPORT (Sesuaikan dengan nama file di struktur folder)
+import style from "./Dasboard.module.css";
 
 dayjs.extend(relativeTime);
 
@@ -33,10 +35,11 @@ ChartJS.register(
 
 function StatCard({ title, value, sub }) {
   return (
-    <div className="stat-card group">
-      <div className="stat-title">{title}</div>
-      <div className="stat-value">{value ?? 0}</div>
-      {sub && <div className="stat-sub">{sub}</div>}
+    // Menggabungkan CSS Module dan class global 'group'
+    <div className={`${style["stat-card"]} group`}>
+      <div className={style["stat-title"]}>{title}</div>
+      <div className={style["stat-value"]}>{value ?? 0}</div>
+      {sub && <div className={style["stat-sub"]}>{sub}</div>}
     </div>
   );
 }
@@ -46,31 +49,32 @@ function ActivityItem({ item }) {
   const time = created ? dayjs(created).fromNow() : "-";
   if (item.type === "new_user") {
     return (
-      <div className="activity-item">
+      <div className={style["activity-item"]}>
         🟢 <strong>{item.name}</strong> mendaftar —{" "}
-        <span className="time">{time}</span>
+        <span className={style.time}>{time}</span>
       </div>
     );
   }
   if (item.type === "new_comment") {
     return (
-      <div className="activity-item">
+      <div className={style["activity-item"]}>
         💬 <strong>{item.user || "User"}</strong> berkomentar: "
-        {item.comment?.slice(0, 80)}" — <span className="time">{time}</span>
+        {item.comment?.slice(0, 80)}" —{" "}
+        <span className={style.time}>{time}</span>
       </div>
     );
   }
   if (item.type === "new_film") {
     return (
-      <div className="activity-item">
+      <div className={style["activity-item"]}>
         🎬 Film baru: <strong>{item.title}</strong> —{" "}
-        <span className="time">{time}</span>
+        <span className={style.time}>{time}</span>
       </div>
     );
   }
   return (
-    <div className="activity-item">
-      • Aktivitas — <span className="time">{time}</span>
+    <div className={style["activity-item"]}>
+      • Aktivitas — <span className={style.time}>{time}</span>
     </div>
   );
 }
@@ -95,7 +99,6 @@ function Dasboard() {
       setError(null);
       const res = await api.get("/api/stats");
 
-      // console.log("STATS RESPONSE:", res.data);
       if (res.data && res.data.success) {
         setStats(res.data.data);
       } else {
@@ -103,7 +106,6 @@ function Dasboard() {
       }
     } catch (err) {
       console.error(err);
-      // jika 401 atau token invalid, redirect ke login
       if (err.response && err.response.status === 401) {
         localStorage.removeItem("authToken");
         navigate("/login");
@@ -147,17 +149,17 @@ function Dasboard() {
 
   if (loading)
     return (
-      <div className="dashboard-page">
+      <div className={style["dashboard-page"]}>
         <Sidebar />
-        <main className="dashboard-main">Memuat dashboard...</main>
+        <main className={style["dashboard-main"]}>Memuat dashboard...</main>
       </div>
     );
 
   if (error)
     return (
-      <div className="dashboard-page">
+      <div className={style["dashboard-page"]}>
         <Sidebar />
-        <main className="dashboard-main">Error: {error}</main>
+        <main className={style["dashboard-main"]}>Error: {error}</main>
       </div>
     );
 
@@ -201,19 +203,20 @@ function Dasboard() {
     : 0;
 
   return (
-    <div className="dashboard-page">
+    <div className={style["dashboard-page"]}>
       <Sidebar />
-      <main className="dashboard-main">
-        <div className="dashboard-header">
+      <main className={style["dashboard-main"]}>
+        <div className={style["dashboard-header"]}>
           <div>
-            <h1 className="dashboard-title">Dashboard</h1>
-            <p className="dashboard-subtitle">
+            <h1 className={style["dashboard-title"]}>Dashboard</h1>
+            <p className={style["dashboard-subtitle"]}>
               Ringkasan statistik dan aktivitas platform
             </p>
           </div>
         </div>
 
-        <section className="stats-grid animate-fade-in">
+        {/* Gabungan class CSS Module dan Utility class */}
+        <section className={`${style["stats-grid"]} animate-fade-in`}>
           <StatCard title="Jumlah User" value={stats.users} />
           <StatCard title="Jumlah Film" value={stats.films} />
           <StatCard title="Jumlah Komentar" value={stats.comments} />
@@ -225,8 +228,11 @@ function Dasboard() {
           />
         </section>
 
-        <section className="chart-section">
-          <div className="chart-card dashboard-card transition-all duration-300">
+        <section className={style["chart-section"]}>
+          {/* Gabungan class CSS Module dan Utility class */}
+          <div
+            className={`${style["chart-card"]} ${style["dashboard-card"]} transition-all duration-300`}
+          >
             <h3>Grafik Pertumbuhan Penonton (30 hari)</h3>
             {labels.length === 0 ? (
               <div>Tidak ada data pertumbuhan</div>
@@ -235,9 +241,12 @@ function Dasboard() {
             )}
           </div>
 
-          <div className="activity-card dashboard-card transition-all duration-300">
+          {/* Gabungan class CSS Module dan Utility class */}
+          <div
+            className={`${style["activity-card"]} ${style["dashboard-card"]} transition-all duration-300`}
+          >
             <h3>Aktivitas Terbaru</h3>
-            <div className="activity-list">
+            <div className={style["activity-list"]}>
               {loadingActivities && <div>Memuat aktivitas...</div>}
               {!loadingActivities && activities.length === 0 && (
                 <div>Tidak ada aktivitas</div>

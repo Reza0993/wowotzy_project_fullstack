@@ -19,9 +19,19 @@ router.delete("/users/:id", UserController.delete);
 router.get("/film", FilmController.index);
 //router.post("/film", FilmController.store);
 router.get("/film/:id", FilmController.show);
-router.put("/film/:id", upload.single("foto_url"), FilmController.update);
-router.delete("/film/:id", FilmController.delete);
-router.post("/film", upload.single("foto_url"), FilmController.store);
+router.put(
+  "/film/:id",
+  authMiddleware,
+  upload.single("foto_url"),
+  FilmController.update,
+);
+router.delete("/film/:id", authMiddleware, FilmController.delete);
+router.post(
+  "/film",
+  authMiddleware,
+  upload.single("foto_url"),
+  FilmController.store,
+);
 
 // ✅ Rute Watchlist yang Dilindungi JWT
 router.get("/watchlist", authMiddleware, WatchlistController.index);

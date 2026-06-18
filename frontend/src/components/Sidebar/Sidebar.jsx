@@ -85,7 +85,7 @@ function Sidebar() {
   const accountRef = useRef(null);
 
   const items = [
-    { to: "/dasboardAdmin", label: "Dashboard", icon: IconDashboard },
+    { to: "/dasboardAdmin/dasboard", label: "Dashboard", icon: IconDashboard },
     { to: "/dasboardAdmin/films", label: "Kelola Film", icon: IconFilm },
     {
       to: "/dasboardAdmin/comments",

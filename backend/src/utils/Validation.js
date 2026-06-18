@@ -23,7 +23,7 @@ const validate = (data) => {
 };
 
 const validateFilm = (data, file, isUpdate = false) => {
-  const { judul, deskripsi, video_url, foto_url, id_admin } = data;
+  const { judul, deskripsi, video_url } = data;
   const errors = [];
 
   if (!judul) {
@@ -50,11 +50,11 @@ const validateFilm = (data, file, isUpdate = false) => {
     errors.push("Foto wajib diupload.");
   }
 
-  if (!id_admin) {
-    errors.push("id_admin tidak boleh kosong");
-  } else if (isNaN(id_admin)) {
-    errors.push("id_admin harus berupa angka");
-  }
+  // if (!id_admin) {
+  //   errors.push("id_admin tidak boleh kosong");
+  // } else if (isNaN(id_admin)) {
+  //   errors.push("id_admin harus berupa angka");
+  // }
 
   return errors;
 };
