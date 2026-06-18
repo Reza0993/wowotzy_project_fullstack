@@ -9,6 +9,7 @@ import History from "./pages/History/history";
 import Dasboard from "./pages/DasboardAdmin/Dasboard/Dasboard";
 import Profile from "./pages/Profile/Profile";
 import EditProfile from "./pages/EditProfile/EditProfile";
+import KelolaFilm from "./pages/DasboardAdmin/Films/KelolaFilm";
 
 function App() {
   return (
@@ -20,7 +21,8 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/history" element={<History />} />
-      <Route path="/DasboardAdmin" element={<Dasboard />} />
+      <Route path="/dasboardAdmin/dasboard" element={<Dasboard />} />
+      <Route path="/dasboardAdmin/films" element={<KelolaFilm />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/edit-profile" element={<EditProfile />} />
     </Routes>

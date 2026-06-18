@@ -235,7 +235,7 @@ function Navbar({ searchQuery, setSearchQuery, onScrollTo, onTriggerToast }) {
                   <button
                     className="dropdown-item w-full text-left px-4 py-2 hover:!bg-red-600 rounded-md"
                     onClick={() => {
-                      navigate("/DasboardAdmin");
+                      navigate("/DasboardAdmin/dasboard");
                     }}
                   >
                     Dashboard
