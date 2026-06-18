@@ -17,10 +17,17 @@ function DetailFilm() {
   const [saved, setSaved] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // State untuk fitur komentar
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+  const [loadingComments, setLoadingComments] = useState(true);
+  const [submittingComment, setSubmittingComment] = useState(false);
+
   useEffect(() => {
     getDetailMovie();
     checkWatchlist();
     recordHistory();
+    fetchComments();
   }, []);
 
   async function getDetailMovie() {
@@ -122,6 +129,100 @@ function DetailFilm() {
     }
   }
 
+  // Mengambil komentar dari API
+  async function fetchComments() {
+    try {
+      setLoadingComments(true);
+      const response = await API.get(`/api/comments/${id}`);
+      setComments(response.data);
+    } catch (error) {
+      console.log("Failed to fetch comments:", error);
+    } finally {
+      setLoadingComments(false);
+    }
+  }
+
+  // Mengirim komentar baru
+  async function handleSubmitComment(e) {
+    e.preventDefault();
+
+    const token = localStorage.getItem("authToken");
+
+    // Jika belum login, tampilkan modal
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    if (!newComment.trim() || newComment.trim().length < 3) return;
+
+    try {
+      setSubmittingComment(true);
+      await API.post(
+        "/api/comments",
+        {
+          id_film: id,
+          komentar: newComment.trim(),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setNewComment("");
+      // Refresh komentar setelah mengirim
+      await fetchComments();
+    } catch (error) {
+      console.log("Failed to submit comment:", error);
+    } finally {
+      setSubmittingComment(false);
+    }
+  }
+
+  // Helper: format tanggal komentar
+  function formatCommentDate(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMin = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMin < 1) return "Baru saja";
+    if (diffMin < 60) return `${diffMin} menit lalu`;
+    if (diffHours < 24) return `${diffHours} jam lalu`;
+    if (diffDays < 7) return `${diffDays} hari lalu`;
+
+    return date.toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  }
+
+  // Helper: generate avatar initials dari username
+  function getAvatarInitial(username) {
+    if (!username) return "?";
+    return username.charAt(0).toUpperCase();
+  }
+
+  // Helper: generate warna avatar berdasarkan username
+  function getAvatarColor(username) {
+    if (!username) return "#ff1e42";
+    const colors = [
+      "#ff1e42", "#e91e63", "#9c27b0", "#673ab7",
+      "#3f51b5", "#2196f3", "#00bcd4", "#009688",
+      "#4caf50", "#ff9800", "#ff5722", "#795548",
+    ];
+    let hash = 0;
+    for (let i = 0; i < username.length; i++) {
+      hash = username.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  }
+
   // Fungsi helper untuk mendeteksi tipe URL gambar (eksternal vs lokal)
   const getImageUrl = (url) => {
     if (!url)
@@ -161,6 +262,7 @@ function DetailFilm() {
   }
 
   const embedUrl = getEmbedUrl(movie.video_url);
+  const isLoggedIn = !!localStorage.getItem("authToken");
 
   return (
     <>
@@ -238,6 +340,108 @@ function DetailFilm() {
             </div>
           </div>
         </div>
+
+        {/* ========================= */}
+        {/* 💬 SECTION KOMENTAR       */}
+        {/* ========================= */}
+        <div className="comments-section" id="comments-section">
+          <div className="comments-header">
+            <div className="comments-title-row">
+              <h2 className="comments-title">💬 Komentar</h2>
+              <span className="comments-count">{comments.length} Komentar</span>
+            </div>
+          </div>
+
+          {/* Form Komentar */}
+          {isLoggedIn ? (
+            <form className="comment-form" onSubmit={handleSubmitComment}>
+              <div className="comment-input-wrapper">
+                <textarea
+                  id="comment-input"
+                  className="comment-input"
+                  placeholder="Tulis komentarmu tentang film ini..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  rows={3}
+                  maxLength={500}
+                  disabled={submittingComment}
+                />
+                <div className="comment-input-footer">
+                  <span className="comment-char-count">
+                    {newComment.length}/500
+                  </span>
+                  <button
+                    type="submit"
+                    className="comment-submit-btn"
+                    disabled={submittingComment || newComment.trim().length < 3}
+                  >
+                    {submittingComment ? (
+                      <span className="comment-submit-loading">
+                        <span className="mini-spinner"></span>
+                        Mengirim...
+                      </span>
+                    ) : (
+                      "Kirim Komentar"
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          ) : (
+            <div className="comment-login-prompt">
+              <span className="comment-login-icon">🔒</span>
+              <p>
+                Kamu harus{" "}
+                <Link to="/login" className="comment-login-link">
+                  login
+                </Link>{" "}
+                terlebih dahulu untuk berkomentar.
+              </p>
+            </div>
+          )}
+
+          {/* Daftar Komentar */}
+          <div className="comments-list">
+            {loadingComments ? (
+              <div className="comments-loading">
+                <div className="mini-spinner"></div>
+                <p>Memuat komentar...</p>
+              </div>
+            ) : comments.length === 0 ? (
+              <div className="comments-empty">
+                <span className="comments-empty-icon">💭</span>
+                <p>Belum ada komentar. Jadilah yang pertama berkomentar!</p>
+              </div>
+            ) : (
+              comments.map((comment) => (
+                <div
+                  className="comment-card"
+                  key={comment.id_comment}
+                >
+                  <div
+                    className="comment-avatar"
+                    style={{
+                      background: `linear-gradient(135deg, ${getAvatarColor(comment.username)}, ${getAvatarColor(comment.username)}aa)`,
+                    }}
+                  >
+                    {getAvatarInitial(comment.username)}
+                  </div>
+                  <div className="comment-body">
+                    <div className="comment-meta">
+                      <span className="comment-username">
+                        {comment.username}
+                      </span>
+                      <span className="comment-date">
+                        {formatCommentDate(comment.tanggal)}
+                      </span>
+                    </div>
+                    <p className="comment-text">{comment.komentar}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
 
       {/* LOGIN MODAL */}
@@ -278,3 +482,4 @@ function DetailFilm() {
 }
 
 export default DetailFilm;
+
