@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 
 import API from "../../services/api";
@@ -12,6 +12,7 @@ function DetailFilm() {
   const { id } = useParams();
 
   const navigate = useNavigate();
+  const commentsListRef = useRef(null);
 
   const [movie, setMovie] = useState(null);
   const [saved, setSaved] = useState(false);
@@ -22,12 +23,32 @@ function DetailFilm() {
   const [newComment, setNewComment] = useState("");
   const [loadingComments, setLoadingComments] = useState(true);
   const [submittingComment, setSubmittingComment] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
+  const [deletingCommentId, setDeletingCommentId] = useState(null);
 
   useEffect(() => {
     getDetailMovie();
     checkWatchlist();
     recordHistory();
     fetchComments();
+  }, []);
+
+  // Handle click outside menu to close it
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        commentsListRef.current &&
+        !commentsListRef.current.contains(event.target)
+      ) {
+        setOpenMenuId(null);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   async function getDetailMovie() {
@@ -72,7 +93,7 @@ function DetailFilm() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
     } catch (error) {
       console.log("Failed to record history:", error);
@@ -168,7 +189,7 @@ function DetailFilm() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       setNewComment("");
@@ -212,15 +233,52 @@ function DetailFilm() {
   function getAvatarColor(username) {
     if (!username) return "#ff1e42";
     const colors = [
-      "#ff1e42", "#e91e63", "#9c27b0", "#673ab7",
-      "#3f51b5", "#2196f3", "#00bcd4", "#009688",
-      "#4caf50", "#ff9800", "#ff5722", "#795548",
+      "#ff1e42",
+      "#e91e63",
+      "#9c27b0",
+      "#673ab7",
+      "#3f51b5",
+      "#2196f3",
+      "#00bcd4",
+      "#009688",
+      "#4caf50",
+      "#ff9800",
+      "#ff5722",
+      "#795548",
     ];
     let hash = 0;
     for (let i = 0; i < username.length; i++) {
       hash = username.charCodeAt(i) + ((hash << 5) - hash);
     }
     return colors[Math.abs(hash) % colors.length];
+  }
+
+  // Function untuk menghapus komentar
+  async function handleDeleteComment(commentId) {
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      setShowLoginModal(true);
+      return;
+    }
+
+    try {
+      setDeletingCommentId(commentId);
+      await API.delete(`/api/comments/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Refresh komentar setelah menghapus
+      await fetchComments();
+      setDeleteConfirmId(null);
+      setOpenMenuId(null);
+    } catch (error) {
+      console.log("Failed to delete comment:", error);
+    } finally {
+      setDeletingCommentId(null);
+    }
   }
 
   // Fungsi helper untuk mendeteksi tipe URL gambar (eksternal vs lokal)
@@ -236,19 +294,54 @@ function DetailFilm() {
   // Fungsi helper untuk mengubah link YouTube biasa menjadi link Embed yang bisa diputar di iframe
   const getEmbedUrl = (url) => {
     if (!url) return null;
+
+    // YouTube Short URL
     if (url.includes("youtu.be/")) {
-      const parts = url.split("youtu.be/");
-      const id = parts[1].split("?")[0];
-      return `https://www.youtube.com/embed/${id}`;
+      const id = url.split("youtu.be/")[1].split("?")[0];
+      return {
+        type: "iframe",
+        url: `https://www.youtube.com/embed/${id}`,
+      };
     }
-    if (url.includes("v=")) {
-      const parts = url.split("v=");
-      const id = parts[1].split("&")[0];
-      return `https://www.youtube.com/embed/${id}`;
+
+    // YouTube Normal URL
+    if (url.includes("youtube.com/watch?v=")) {
+      const id = url.split("v=")[1].split("&")[0];
+      return {
+        type: "iframe",
+        url: `https://www.youtube.com/embed/${id}`,
+      };
     }
-    if (url.includes("embed/")) {
-      return url;
+
+    // Vimeo
+    if (url.includes("vimeo.com")) {
+      const id = url.split("/").pop();
+      return {
+        type: "iframe",
+        url: `https://player.vimeo.com/video/${id}`,
+      };
     }
+
+    // Google Drive
+    if (url.includes("drive.google.com")) {
+      const match = url.match(/\/d\/(.*?)\//);
+
+      if (match && match[1]) {
+        return {
+          type: "iframe",
+          url: `https://drive.google.com/file/d/${match[1]}/preview`,
+        };
+      }
+    }
+
+    // File MP4 langsung
+    if (url.endsWith(".mp4") || url.endsWith(".webm") || url.endsWith(".ogg")) {
+      return {
+        type: "video",
+        url,
+      };
+    }
+
     return null;
   };
 
@@ -261,7 +354,7 @@ function DetailFilm() {
     );
   }
 
-  const embedUrl = getEmbedUrl(movie.video_url);
+  const videoData = getEmbedUrl(movie.video_url);
   const isLoggedIn = !!localStorage.getItem("authToken");
 
   return (
@@ -281,17 +374,25 @@ function DetailFilm() {
         </div>
 
         {/* 🍿 MODE BIOSKOP (THEATER MODE): Layar Lebar Megah di Atas Halaman Detail */}
-        {embedUrl && (
+        {videoData && (
           <div className="cinema-theater">
             <span className="theater-badge">🍿 MODE BIOSKOP AKTIF</span>
+
             <div className="cinema-screen">
-              <iframe
-                src={`${embedUrl}?autoplay=1&rel=0`}
-                title={`Trailer ${movie.judul}`}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-              ></iframe>
+              {videoData.type === "iframe" ? (
+                <iframe
+                  src={`${videoData.url}?autoplay=1`}
+                  title={movie.judul}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video controls autoPlay>
+                  <source src={videoData.url} />
+                  Browser Anda tidak mendukung video.
+                </video>
+              )}
             </div>
           </div>
         )}
@@ -313,7 +414,7 @@ function DetailFilm() {
             <p className="movie-description">{movie.deskripsi}</p>
 
             {/* Jika format video_url bukan YouTube, sajikan tombol putar eksternal */}
-            {!embedUrl && movie.video_url && (
+            {!videoData && movie.video_url && (
               <div className="video-fallback">
                 <a
                   href={movie.video_url}
@@ -340,7 +441,6 @@ function DetailFilm() {
             </div>
           </div>
         </div>
-
         {/* ========================= */}
         {/* 💬 SECTION KOMENTAR       */}
         {/* ========================= */}
@@ -401,7 +501,7 @@ function DetailFilm() {
           )}
 
           {/* Daftar Komentar */}
-          <div className="comments-list">
+          <div className="comments-list" ref={commentsListRef}>
             {loadingComments ? (
               <div className="comments-loading">
                 <div className="mini-spinner"></div>
@@ -414,10 +514,7 @@ function DetailFilm() {
               </div>
             ) : (
               comments.map((comment) => (
-                <div
-                  className="comment-card"
-                  key={comment.id_comment}
-                >
+                <div className="comment-card" key={comment.id_comment}>
                   <div
                     className="comment-avatar"
                     style={{
@@ -434,6 +531,32 @@ function DetailFilm() {
                       <span className="comment-date">
                         {formatCommentDate(comment.tanggal)}
                       </span>
+                      <div className="comment-menu-wrapper">
+                        <button
+                          className="comment-menu-btn"
+                          onClick={() =>
+                            setOpenMenuId(
+                              openMenuId === comment.id_comment
+                                ? null
+                                : comment.id_comment,
+                            )
+                          }
+                        >
+                          ⋮
+                        </button>
+                        {openMenuId === comment.id_comment && (
+                          <div className="comment-menu-dropdown">
+                            <button
+                              className="comment-menu-item delete"
+                              onClick={() =>
+                                setDeleteConfirmId(comment.id_comment)
+                              }
+                            >
+                              🗑️ Hapus
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                     <p className="comment-text">{comment.komentar}</p>
                   </div>
@@ -476,10 +599,43 @@ function DetailFilm() {
         </div>
       )}
 
+      {/* DELETE COMMENT CONFIRMATION MODAL */}
+      {deleteConfirmId && (
+        <div className="comment-delete-overlay">
+          <div className="comment-delete-modal">
+            <div className="comment-delete-icon">⚠️</div>
+            <h3 className="comment-delete-title">Hapus Komentar?</h3>
+            <p className="comment-delete-text">
+              Apakah kamu yakin ingin menghapus komentar ini? Tindakan ini tidak
+              dapat dibatalkan.
+            </p>
+            <div className="comment-delete-actions">
+              <button
+                className="comment-delete-cancel"
+                onClick={() => setDeleteConfirmId(null)}
+                disabled={deletingCommentId !== null}
+              >
+                Batal
+              </button>
+              <button
+                className="comment-delete-confirm"
+                onClick={() => handleDeleteComment(deleteConfirmId)}
+                disabled={deletingCommentId !== null}
+              >
+                {deletingCommentId === deleteConfirmId ? (
+                  <span className="delete-loading">Menghapus...</span>
+                ) : (
+                  "Hapus"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Footer />
     </>
   );
 }
 
 export default DetailFilm;
-

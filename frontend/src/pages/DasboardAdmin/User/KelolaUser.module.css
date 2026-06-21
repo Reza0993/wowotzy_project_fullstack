@@ -1,12 +1,9 @@
 :root {
   --accent: #ff1e42;
-
   --bg: #f4f4f4;
-
   --card:
     radial-gradient(circle at top, rgba(255, 0, 85, 0.12), transparent 30%),
     linear-gradient(to bottom, #120204, #050505);
-
   --card-secondary:
     radial-gradient(
       circle at top right,
@@ -14,15 +11,11 @@
       transparent 40%
     ),
     linear-gradient(to bottom, #1a0307, #080808);
-
   --text-main: #f8fafc;
   --text-secondary: #b4b4b4;
   --text-title: #0a0506;
-
   --btn-bg: linear-gradient(135deg, #ff1e42 0%, #b3001b 100%);
-
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-
   --border: rgba(255, 255, 255, 0.08);
 }
 
@@ -41,6 +34,7 @@
   flex: 1;
   padding: 24px;
   overflow-x: hidden;
+  overflow-y: auto;
   background: #f4f4f4;
   height: 100vh;
 }
@@ -109,7 +103,6 @@
 }
 
 .addButton:hover {
-  /* background: var(--accent); */
   transform: translateY(-3px) scale(1.03);
   box-shadow: 0 6px 20px rgba(255, 30, 66, 0.5);
 }
@@ -133,12 +126,9 @@
 
 .statCard {
   background: var(--card);
-
   border-radius: 20px;
   padding: 24px;
-
   box-shadow: var(--shadow);
-
   position: relative;
   overflow: hidden;
 }
@@ -148,10 +138,8 @@
   position: absolute;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 4px;
-
   background: var(--accent);
 }
 
@@ -173,19 +161,15 @@
 
 .tableWrapper {
   background: var(--card);
-
   border-radius: 24px;
-
   overflow-x: auto;
-
   box-shadow: var(--shadow);
-
   padding: 20px;
 }
 
 table {
   width: 100%;
-  min-width: 950px;
+  min-width: 800px;
   border-collapse: collapse;
 }
 
@@ -221,22 +205,29 @@ tbody td {
 }
 
 /* ==========================
-   Poster
+   Role Badges
 ========================== */
 
-.poster {
-  width: 80px;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid var(--border);
+.roleBadgeAdmin {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
-@media (max-width: 768px) {
-  .poster {
-    width: 60px;
-    height: 85px;
-  }
+.roleBadgeUser {
+  background: rgba(59, 130, 246, 0.15);
+  color: #93c5fd;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 /* ==========================
@@ -251,10 +242,13 @@ tbody td {
   border-radius: 10px;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .editBtn:hover {
   background: #1d4ed8;
+  transform: translateY(-1px);
 }
 
 .deleteBtn {
@@ -265,10 +259,13 @@ tbody td {
   border-radius: 10px;
   cursor: pointer;
   transition: 0.3s;
+  font-weight: 600;
+  font-size: 13px;
 }
 
 .deleteBtn:hover {
   background: #b91c1c;
+  transform: translateY(-1px);
 }
 
 /* ==========================
@@ -276,36 +273,19 @@ tbody td {
 ========================== */
 
 .modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   background: rgba(15, 23, 42, 0.65);
   backdrop-filter: blur(5px);
-
-  z-index: 9999;
+  padding: 16px;
 }
+
 .card {
   background: linear-gradient(180deg, #170206 0%, #090909 100%);
-
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   border-radius: 24px;
-
   padding: 32px;
-
   max-height: 90vh;
-
   overflow-y: auto;
-
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
-
   position: relative;
 }
 
@@ -318,31 +298,27 @@ tbody td {
 .closeBtn {
   width: 42px;
   height: 42px;
-
   border-radius: 50%;
-
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   background: rgba(255, 255, 255, 0.03);
-
   color: white;
-
   cursor: pointer;
-
   transition: 0.2s;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .closeBtn:hover {
   background: rgba(255, 30, 66, 0.15);
-
   border-color: var(--accent);
 }
 
 .formGroup {
   display: flex;
   flex-direction: column;
-
-  gap: 12px;
+  gap: 8px;
 }
 
 .modalForm {
@@ -351,93 +327,111 @@ tbody td {
   flex-direction: column;
   gap: 28px;
 }
+
 /* ==========================
    Inputs
 ========================== */
 
 .modalInput {
   background: rgba(255, 255, 255, 0.03);
-
   color: white;
-
   border: 1px solid rgba(255, 255, 255, 0.08);
-
   border-radius: 14px;
-
   padding: 14px 16px;
-
   font-size: 15px;
-
   transition: 0.25s;
 }
 
 .modalInput:hover {
   border-color: rgba(255, 255, 255, 0.18);
 }
+
 .modalInput:focus {
   border-color: #ff1e42;
-
   background: rgba(255, 255, 255, 0.05);
-
   box-shadow: 0 0 0 4px rgba(255, 30, 66, 0.12);
+  outline: none;
 }
+
 .modalInput::placeholder {
   color: #777;
 }
 
-textarea.modalInput {
-  min-height: 140px;
-}
-
-.uploadArea {
-  border: 2px dashed rgba(255, 255, 255, 0.15);
-
-  border-radius: 14px;
-
-  padding: 20px;
-
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
+select.modalInput {
   cursor: pointer;
-
-  transition: 0.25s;
 }
 
-.uploadArea:hover {
-  border-color: var(--accent);
-
-  background: rgba(255, 30, 66, 0.05);
-}
-
-.previewImage {
-  width: 180px;
-
-  height: 260px;
-
-  object-fit: cover;
-
-  border-radius: 16px;
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
 /* ==========================
-   Accent Button
+   Footer Button
 ========================== */
 
-.btnAccent {
-  background: var(--accent);
-  color: white;
-  transition: 0.25s ease;
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 14px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.btnAccent:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
+.cancelBtn {
+  min-width: 120px;
+  padding: 12px 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
+  color: #d1d5db;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.cancelBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.saveBtn {
+  min-width: 160px;
+  padding: 12px 22px;
+  border-radius: 14px;
+  border: none;
+  background: var(--btn-bg);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.saveBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 30, 66, 0.4);
+}
+
+/* ==========================
+   Loading Message
+========================== */
+
+.loadingMessage {
+  padding: 40px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 16px;
+}
+
+/* ==========================
+   Modal Overlay
+========================== */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
 }
 
 /* ==========================
@@ -445,7 +439,7 @@ textarea.modalInput {
 ========================== */
 
 .confirmModal {
-  background: var(--card);
+  background: linear-gradient(180deg, #170206 0%, #090909 100%);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   padding: 32px;
@@ -536,115 +530,14 @@ textarea.modalInput {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(255, 30, 66, 0.4);
   border-radius: 10px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 30, 66, 0.6);
+}
+
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-.statCard::before,
-.tableWrapper::before,
-.card::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 4px;
-
-  /* background: var(--accent); */
-
-  z-index: 1;
-}
-
-/* ==========================
-   Footer Button
-========================== */
-.modalFooter {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  gap: 14px;
-
-  margin-top: 32px;
-  padding-top: 24px;
-
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.cancelBtn {
-  min-width: 120px;
-
-  padding: 12px 22px;
-
-  border-radius: 14px;
-
-  border: 1px solid rgba(255, 255, 255, 0.15);
-
-  background: rgba(255, 255, 255, 0.03);
-
-  color: #d1d5db;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: all 0.25s ease;
-}
-
-.cancelBtn:hover {
-  background: rgba(255, 255, 255, 0.08);
-
-  border-color: rgba(255, 255, 255, 0.25);
-
-  color: white;
-}
-
-.saveBtn {
-  min-width: 180px;
-
-  padding: 12px 24px;
-
-  border: none;
-
-  border-radius: 14px;
-
-  background: var(--btn-bg);
-
-  color: white;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  box-shadow: 0 10px 25px rgba(255, 30, 66, 0.35);
-
-  transition: all 0.25s ease;
-}
-
-.saveBtn:hover {
-  transform: translateY(-2px);
-
-  box-shadow: 0 14px 35px rgba(255, 30, 66, 0.45);
-}
-
-.saveBtn:active {
-  transform: translateY(0);
-}
-
-@media (max-width: 640px) {
-  .modalFooter {
-    flex-direction: column-reverse;
-  }
-
-  .cancelBtn,
-  .saveBtn {
-    width: 100%;
-  }
+  background: transparent;
 }

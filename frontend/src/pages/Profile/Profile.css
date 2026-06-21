@@ -61,7 +61,7 @@
 }
 
 .edit-profile-btn:hover {
-  background-color: #ff1e42;
+  background: linear-gradient(135deg, #ff1e42 0%, #b3001b 100%);
   color: #fff;
   box-shadow: 0 4px 10px rgba(255, 30, 66, 0.3);
 }

@@ -45,7 +45,9 @@ router.delete("/history/:id", authMiddleware, HistoryController.delete);
 
 // ✅ Rute Komentar (Melihat bersifat publik, Mengirim dilindungi JWT)
 router.get("/comments/:id", CommentController.getComments);
+router.get("/comments-all", authMiddleware, CommentController.getAllComments); // ✅ Endpoint untuk admin
 router.post("/comments", authMiddleware, CommentController.addComment);
+router.delete("/comments/:id", authMiddleware, CommentController.deleteComment);
 
 // di bagian atas: const StatsController = require("../controllers/StatsController");
 router.get("/stats", authMiddleware, StatsController.index);

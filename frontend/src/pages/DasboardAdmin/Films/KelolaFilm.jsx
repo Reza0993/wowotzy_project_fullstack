@@ -1,6 +1,7 @@
 // KelolaFilm.jsx
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar"; // Sesuaikan path jika perlu
+import Notification from "../../../components/Notification/Notification";
 import KelolaFilmStyle from "./KelolaFilm.module.css";
 
 function KelolaFilm() {
@@ -8,6 +9,20 @@ function KelolaFilm() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Notification State
+  const [notification, setNotification] = useState({
+    show: false,
+    type: "info",
+    message: "",
+  });
+
+  // Confirm Modal State
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    id: null,
+  });
 
   // State Form disesuaikan dengan field di database
   const [formData, setFormData] = useState({
@@ -17,18 +32,36 @@ function KelolaFilm() {
     foto_url: null,
   });
 
+  // Helper function untuk show notification
+  const showNotification = (type, message, duration = 3000) => {
+    setNotification({
+      show: true,
+      type,
+      message,
+    });
+    if (duration > 0) {
+      setTimeout(() => {
+        setNotification((prev) => ({ ...prev, show: false }));
+      }, duration);
+    }
+  };
+
   // Ganti port jika backend berjalan di port yang berbeda
   const API_URL = "http://localhost:3000/api/film";
   const IMAGE_BASE_URL = "http://localhost:3000/uploads/";
 
   // READ: Fetch semua film
   const fetchFilms = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(API_URL);
       const result = await response.json();
       setFilms(result.data || []);
     } catch (error) {
       console.error("Gagal mengambil data film:", error);
+      showNotification("error", "Gagal mengambil data film");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +86,7 @@ function KelolaFilm() {
     const token = localStorage.getItem("authToken");
 
     if (!token) {
-      alert("Anda harus login terlebih dahulu");
+      showNotification("error", "Anda harus login terlebih dahulu");
       return;
     }
 
@@ -90,7 +123,8 @@ function KelolaFilm() {
         );
       }
 
-      alert(
+      showNotification(
+        "success",
         isEditMode ? "Film berhasil diperbarui" : "Film berhasil ditambahkan",
       );
 
@@ -98,7 +132,7 @@ function KelolaFilm() {
       closeModal();
     } catch (error) {
       console.error(error);
-      alert(error.message);
+      showNotification("error", error.message);
     }
   };
 
@@ -106,12 +140,17 @@ function KelolaFilm() {
     return localStorage.getItem("authToken");
   };
 
-  // DELETE
-  const handleDelete = async (id) => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus film ini?")) {
-      return;
-    }
+  // DELETE - Show confirmation modal
+  const openDeleteConfirm = (id) => {
+    setConfirmModal({
+      isOpen: true,
+      id,
+    });
+  };
 
+  // DELETE - Execute deletion
+  const confirmDelete = async () => {
+    const id = confirmModal.id;
     try {
       const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
@@ -126,11 +165,12 @@ function KelolaFilm() {
         throw new Error(result.message);
       }
 
+      setConfirmModal({ isOpen: false, id: null });
+      showNotification("success", "Film berhasil dihapus");
       fetchFilms();
-      alert("Film berhasil dihapus");
     } catch (error) {
       console.error(error);
-      alert(error.message);
+      showNotification("error", error.message);
     }
   };
 
@@ -164,7 +204,48 @@ function KelolaFilm() {
 
   return (
     <div className={KelolaFilmStyle.pageContainer}>
+      <Notification
+        type={notification.type}
+        message={notification.message}
+        show={notification.show}
+        onClose={() => setNotification((prev) => ({ ...prev, show: false }))}
+      />
       <Sidebar />
+
+      {/* Confirm Modal */}
+      {confirmModal.isOpen && (
+        <div
+          className={KelolaFilmStyle.modalOverlay}
+          onClick={() => setConfirmModal({ isOpen: false, id: null })}
+        >
+          <div
+            className={KelolaFilmStyle.confirmModal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={KelolaFilmStyle.confirmHeader}>
+              <h3>⚠️ Hapus Film</h3>
+            </div>
+            <p className={KelolaFilmStyle.confirmMessage}>
+              Apakah Anda yakin ingin menghapus film ini? Tindakan ini tidak
+              dapat dibatalkan.
+            </p>
+            <div className={KelolaFilmStyle.confirmFooter}>
+              <button
+                onClick={() => setConfirmModal({ isOpen: false, id: null })}
+                className={KelolaFilmStyle.cancelBtn}
+              >
+                Batal
+              </button>
+              <button
+                onClick={confirmDelete}
+                className={KelolaFilmStyle.confirmDeleteBtn}
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className={KelolaFilmStyle.mainContent}>
         <div className={KelolaFilmStyle.headerSection}>
@@ -254,7 +335,7 @@ function KelolaFilm() {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDelete(film.id_film)}
+                          onClick={() => openDeleteConfirm(film.id_film)}
                           className={KelolaFilmStyle.deleteBtn}
                         >
                           Hapus

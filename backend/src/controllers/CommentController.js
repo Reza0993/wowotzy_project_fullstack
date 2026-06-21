@@ -18,6 +18,19 @@ class CommentController {
     });
   }
 
+  // ✅ Mengambil semua komentar untuk admin
+  async getAllComments(req, res) {
+    try {
+      const result = await Comment.getAll();
+      res.status(200).json({
+        success: true,
+        data: result,
+      });
+    } catch (error) {
+      return errorHandler(res, error);
+    }
+  }
+
   // tambah komentar
   async addComment(req, res) {
     try {
@@ -36,6 +49,27 @@ class CommentController {
         success: true,
         message: "Komentar berhasil ditambahkan!",
         data: comment,
+      });
+    } catch (error) {
+      return errorHandler(res, error);
+    }
+  }
+
+  async deleteComment(req, res) {
+    try {
+      const id = req.params.id;
+
+      if (isNaN(id)) {
+        return errorHandler(res, "ID harus berupa angka", 400);
+      }
+
+      const result = await Comment.delete(id);
+      if (result.affectedRows === 0) {
+        return errorHandler(res, "Data tidak ditemukan", 404);
+      }
+      res.status(200).json({
+        success: true,
+        message: "Komentar berhasil dihapus",
       });
     } catch (error) {
       return errorHandler(res, error);

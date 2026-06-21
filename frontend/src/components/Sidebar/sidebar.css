@@ -10,7 +10,7 @@
 /* container */
 .sidebar {
   width: 260px;
-  min-height: 100vh;
+  height: 100vh;
   padding: 1rem;
   box-sizing: border-box;
   background: radial-gradient(
@@ -28,6 +28,7 @@
     transform 160ms ease;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
 }
 
 /* collapsed */

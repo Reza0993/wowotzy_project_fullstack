@@ -10,6 +10,8 @@ import Dasboard from "./pages/DasboardAdmin/Dasboard/Dasboard";
 import Profile from "./pages/Profile/Profile";
 import EditProfile from "./pages/EditProfile/EditProfile";
 import KelolaFilm from "./pages/DasboardAdmin/Films/KelolaFilm";
+import KelolaKomentar from "./pages/DasboardAdmin/Komentar/KelolaKomentar";
+import KelolaUser from "./pages/DasboardAdmin/User/KelolaUser";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
       <Route path="/history" element={<History />} />
       <Route path="/dasboardAdmin/dasboard" element={<Dasboard />} />
       <Route path="/dasboardAdmin/films" element={<KelolaFilm />} />
+      <Route path="/dasboardAdmin/comments" element={<KelolaKomentar />} />
+      <Route path="/dasboardAdmin/users" element={<KelolaUser />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/edit-profile" element={<EditProfile />} />
     </Routes>

@@ -92,7 +92,8 @@
 }
 
 .delete-btn:hover {
-  color: #dc2626;
+  color: #fff;
+  background: linear-gradient(135deg, #ff1e42 0%, #b3001b 100%);
 }
 
 .description {
