@@ -168,6 +168,63 @@
 }
 
 /* ==========================
+   Filter Section
+========================== */
+
+.filterSection {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  background: var(--card);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px 14px 40px;
+  font-size: 14px;
+  transition: 0.25s;
+}
+
+.searchInput:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.searchInput:focus {
+  border-color: var(--accent);
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 4px rgba(255, 30, 66, 0.12);
+  outline: none;
+  color: black;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+@media (max-width: 1024px) {
+  .filterSection {
+    flex-direction: column;
+  }
+  .searchBox {
+    min-width: 100%;
+  }
+}
+
+/* ==========================
    Table
 ========================== */
 

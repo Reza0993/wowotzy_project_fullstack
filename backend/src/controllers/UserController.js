@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const { validateUser } = require("../utils/Validation");
 const errorHandler = require("../utils/errorHandler");
+const bcrypt = require("bcrypt");
 
 class UserController {
   async index(req, res) {
@@ -54,10 +55,13 @@ class UserController {
         return errorHandler(res, "Email sudah terdaftar", 400);
       }
 
+      // Hash password menggunakan bcrypt sebelum disimpan
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
       const userData = {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
+        password: hashedPassword,
         role: req.body.role || "user"
       };
 
@@ -102,7 +106,10 @@ class UserController {
       if (req.body.username) updateData.username = req.body.username;
       if (req.body.email) updateData.email = req.body.email;
       if (req.body.role) updateData.role = req.body.role;
-      if (req.body.password) updateData.password = req.body.password;
+      if (req.body.password) {
+        // Hash password baru menggunakan bcrypt
+        updateData.password = await bcrypt.hash(req.body.password, 10);
+      }
       
       const result = await User.update(id, updateData);
 

@@ -10,6 +10,7 @@ function KelolaFilm() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Notification State
   const [notification, setNotification] = useState({
@@ -202,6 +203,15 @@ function KelolaFilm() {
     return `${IMAGE_BASE_URL}${foto}`;
   };
 
+  // Filter films based on search query
+  const filteredFilms = films.filter((film) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      film.judul?.toLowerCase().includes(query) ||
+      film.deskripsi?.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div className={KelolaFilmStyle.pageContainer}>
       <Notification
@@ -278,6 +288,20 @@ function KelolaFilm() {
           </div>
         </section>
 
+        {/* Filters */}
+        <div className={KelolaFilmStyle.filterSection}>
+          <div className={KelolaFilmStyle.searchBox}>
+            <input
+              type="text"
+              placeholder="Cari judul atau deskripsi film..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={KelolaFilmStyle.searchInput}
+            />
+            <span className={KelolaFilmStyle.searchIcon}>🔍</span>
+          </div>
+        </div>
+
         {/* Tabel Data Film */}
         <div className={KelolaFilmStyle.tableWrapper}>
           <table className={`w-full text-left border-collapse`}>
@@ -293,8 +317,8 @@ function KelolaFilm() {
               </tr>
             </thead>
             <tbody>
-              {films.length > 0 ? (
-                films.map((film) => (
+              {filteredFilms.length > 0 ? (
+                filteredFilms.map((film) => (
                   <tr
                     key={film.id_film}
                     className={`${KelolaFilmStyle.tableRow} ${KelolaFilmStyle.textMain}`}
@@ -350,7 +374,7 @@ function KelolaFilm() {
                     colSpan="5"
                     className={`py-6 text-center ${KelolaFilmStyle.textSecondary}`}
                   >
-                    Belum ada data film. Silakan tambah data baru.
+                    {searchQuery ? "Tidak ada film yang sesuai dengan pencarian." : "Belum ada data film. Silakan tambah data baru."}
                   </td>
                 </tr>
               )}

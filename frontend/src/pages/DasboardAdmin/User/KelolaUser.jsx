@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Sidebar from "../../../components/Sidebar/Sidebar";
 import Notification from "../../../components/Notification/Notification";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import styles from "./KelolaUser.module.css";
 
 function KelolaUser() {
@@ -9,6 +10,13 @@ function KelolaUser() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isRoleDropdownOpen, setIsRoleDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterRole, setFilterRole] = useState("all");
+  const dropdownRef = useRef(null);
+  const filterRoleRef = useRef(null);
+  const [isFilterRoleOpen, setIsFilterRoleOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   // Notification State
   const [notification, setNotification] = useState({
@@ -67,6 +75,20 @@ function KelolaUser() {
 
   useEffect(() => {
     fetchUsers();
+  }, []);
+
+  // Tutup dropdown role jika klik di luar
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIsRoleDropdownOpen(false);
+      }
+      if (filterRoleRef.current && !filterRoleRef.current.contains(e.target)) {
+        setIsFilterRoleOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Handle Input
@@ -220,7 +242,10 @@ function KelolaUser() {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setShowPassword(false);
+  };
 
   // Helper untuk badge role
   const getRoleBadgeClass = (role) => {
@@ -305,6 +330,66 @@ function KelolaUser() {
           </div>
         </section>
 
+        {/* Filters */}
+        <div className={styles.filterSection}>
+          <div className={styles.searchBox}>
+            <input
+              type="text"
+              placeholder="Cari username atau email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+            />
+            <span className={styles.searchIcon}>🔍</span>
+          </div>
+
+          <div className={styles.customFilterDropdown} ref={filterRoleRef}>
+            <button
+              type="button"
+              className={`${styles.dropdownTrigger} ${isFilterRoleOpen ? styles.dropdownTriggerOpen : ""}`}
+              onClick={() => setIsFilterRoleOpen(!isFilterRoleOpen)}
+            >
+              <span className={styles.dropdownSelected}>
+                {filterRole === "all" ? "Semua Role" : filterRole === "admin" ? "🔑 Admin" : "👤 User"}
+              </span>
+              <svg
+                className={`${styles.chevron} ${isFilterRoleOpen ? styles.chevronOpen : ""}`}
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            {isFilterRoleOpen && (
+              <div className={styles.dropdownMenu}>
+                <button
+                  type="button"
+                  className={`${styles.dropdownOption} ${filterRole === "all" ? styles.dropdownOptionActive : ""}`}
+                  onClick={() => { setFilterRole("all"); setIsFilterRoleOpen(false); }}
+                >
+                  <div className={styles.optionTitle}>Semua Role</div>
+                  {filterRole === "all" && <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>}
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.dropdownOption} ${filterRole === "admin" ? styles.dropdownOptionActive : ""}`}
+                  onClick={() => { setFilterRole("admin"); setIsFilterRoleOpen(false); }}
+                >
+                  <div className={styles.optionTitle}>🔑 Admin</div>
+                  {filterRole === "admin" && <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>}
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.dropdownOption} ${filterRole === "user" ? styles.dropdownOptionActive : ""}`}
+                  onClick={() => { setFilterRole("user"); setIsFilterRoleOpen(false); }}
+                >
+                  <div className={styles.optionTitle}>👤 User</div>
+                  {filterRole === "user" && <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Tabel Data User */}
         <div className={styles.tableWrapper}>
           {isLoading ? (
@@ -325,8 +410,27 @@ function KelolaUser() {
                 </tr>
               </thead>
               <tbody>
-                {users.length > 0 ? (
-                  users.map((user) => (
+                {users
+                  .filter((user) => {
+                    const matchesSearch =
+                      searchQuery.trim() === "" ||
+                      user.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                      user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+                    const matchesRole =
+                      filterRole === "all" || user.role === filterRole;
+                    return matchesSearch && matchesRole;
+                  }).length > 0 ? (
+                  users
+                    .filter((user) => {
+                      const matchesSearch =
+                        searchQuery.trim() === "" ||
+                        user.username?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+                      const matchesRole =
+                        filterRole === "all" || user.role === filterRole;
+                      return matchesSearch && matchesRole;
+                    })
+                    .map((user) => (
                     <tr
                       key={user.id_user}
                       className={`${styles.tableRow} ${styles.textMain}`}
@@ -367,7 +471,9 @@ function KelolaUser() {
                       colSpan="5"
                       className={`py-6 text-center ${styles.textSecondary}`}
                     >
-                      Belum ada data user. Silakan tambah data baru.
+                      {searchQuery || filterRole !== "all"
+                        ? "Tidak ada user yang cocok dengan pencarian atau filter."
+                        : "Belum ada data user. Silakan tambah data baru."}
                     </td>
                   </tr>
                 )}
@@ -435,34 +541,105 @@ function KelolaUser() {
                   Password{" "}
                   {isEditMode && "(Kosongkan jika tidak ingin mengubah)"}
                 </label>
-                <input
-                  type="password"
-                  name="password"
-                  required={!isEditMode}
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 rounded-md ${styles.modalInput}`}
-                  placeholder={
-                    isEditMode
-                      ? "Biarkan kosong jika tidak ingin mengubah"
-                      : "Masukkan password"
-                  }
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    required={!isEditMode}
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    className={`w-full px-3 py-2 pr-12 rounded-md ${styles.modalInput}`}
+                    placeholder={
+                      isEditMode
+                        ? "Biarkan kosong jika tidak ingin mengubah"
+                        : "Masukkan password"
+                    }
+                  />
+                  <button
+                    type="button"
+                    className={styles.passwordToggleBtn}
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                  >
+                    {showPassword ? <FaEyeSlash className="text-[16px]" /> : <FaEye className="text-[16px]" />}
+                  </button>
+                </div>
               </div>
 
               <div className={styles.formGroup}>
                 <label className={`block mb-1 text-sm ${styles.textSecondary}`}>
                   Role
                 </label>
-                <select
-                  name="role"
-                  value={formData.role}
-                  onChange={handleInputChange}
-                  className={`w-full px-3 py-2 rounded-md ${styles.modalInput}`}
+                <div
+                  className={styles.customDropdown}
+                  ref={dropdownRef}
                 >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
+                  <button
+                    type="button"
+                    className={`${styles.dropdownTrigger} ${isRoleDropdownOpen ? styles.dropdownTriggerOpen : ""}`}
+                    onClick={() => setIsRoleDropdownOpen((prev) => !prev)}
+                  >
+                    <span className={styles.dropdownSelected}>
+                      {formData.role === "admin" ? (
+                        <><span className={styles.roleIconAdmin}>🔑</span> Admin</>
+                      ) : (
+                        <><span className={styles.roleIconUser}>👤</span> User</>
+                      )}
+                    </span>
+                    <svg
+                      className={`${styles.chevron} ${isRoleDropdownOpen ? styles.chevronOpen : ""}`}
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                    >
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+
+                  {isRoleDropdownOpen && (
+                    <div className={styles.dropdownMenu}>
+                      <button
+                        type="button"
+                        className={`${styles.dropdownOption} ${formData.role === "user" ? styles.dropdownOptionActive : ""}`}
+                        onClick={() => {
+                          setFormData({ ...formData, role: "user" });
+                          setIsRoleDropdownOpen(false);
+                        }}
+                      >
+                        <span className={styles.roleIconUser}>👤</span>
+                        <div>
+                          <div className={styles.optionTitle}>User</div>
+                          <div className={styles.optionDesc}>Akses standar pengguna</div>
+                        </div>
+                        {formData.role === "user" && (
+                          <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                      </button>
+
+                      <div className={styles.dropdownDivider} />
+
+                      <button
+                        type="button"
+                        className={`${styles.dropdownOption} ${formData.role === "admin" ? styles.dropdownOptionActive : ""}`}
+                        onClick={() => {
+                          setFormData({ ...formData, role: "admin" });
+                          setIsRoleDropdownOpen(false);
+                        }}
+                      >
+                        <span className={styles.roleIconAdmin}>🔑</span>
+                        <div>
+                          <div className={styles.optionTitle}>Admin</div>
+                          <div className={styles.optionDesc}>Akses penuh ke dashboard</div>
+                        </div>
+                        {formData.role === "admin" && (
+                          <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className={styles.modalFooter}>

@@ -56,6 +56,18 @@ export default function History() {
     }
   };
 
+  const getImageUrl = (url) => {
+    if (!url) {
+      return "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=300";
+    }
+
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url;
+    }
+
+    return `http://localhost:3000/uploads/${url}`;
+  };
+
   useEffect(() => {
     loadHistory();
   }, []);
@@ -82,8 +94,9 @@ export default function History() {
             <div key={item.id_history} className="history-card">
               <div className="thumbnail">
                 <img
-                  src={item.foto_url || "https://via.placeholder.com/300x170"}
+                  src={getImageUrl(item.foto_url)}
                   alt={item.judul}
+                  referrerPolicy="no-referrer"
                 />
               </div>
 

@@ -10,6 +10,8 @@ function KelolaKomentar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterFilm, setFilterFilm] = useState("");
   const [films, setFilms] = useState([]);
+  const filterFilmRef = React.useRef(null);
+  const [isFilterFilmOpen, setIsFilterFilmOpen] = useState(false);
   const [notification, setNotification] = useState({
     show: false,
     type: "info",
@@ -82,6 +84,16 @@ function KelolaKomentar() {
 
   useEffect(() => {
     fetchComments();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (filterFilmRef.current && !filterFilmRef.current.contains(e.target)) {
+        setIsFilterFilmOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Handle Delete
@@ -226,18 +238,50 @@ function KelolaKomentar() {
             <span className={styles.searchIcon}>🔍</span>
           </div>
 
-          <select
-            value={filterFilm}
-            onChange={(e) => setFilterFilm(e.target.value)}
-            className={styles.selectFilter}
-          >
-            <option value="">Semua Film</option>
-            {films.map((film) => (
-              <option key={film.id} value={film.id}>
-                {film.judul}
-              </option>
-            ))}
-          </select>
+          <div className={styles.customFilterDropdown} ref={filterFilmRef}>
+            <button
+              type="button"
+              className={`${styles.dropdownTrigger} ${isFilterFilmOpen ? styles.dropdownTriggerOpen : ""}`}
+              onClick={() => setIsFilterFilmOpen(!isFilterFilmOpen)}
+            >
+              <span className={styles.dropdownSelected}>
+                <span className={styles.truncateText}>
+                  {filterFilm === "" ? "Semua Film" : films.find(f => f.id.toString() === filterFilm)?.judul || "Semua Film"}
+                </span>
+              </span>
+              <svg
+                className={`${styles.chevron} ${isFilterFilmOpen ? styles.chevronOpen : ""}`}
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            {isFilterFilmOpen && (
+              <div className={styles.dropdownMenu}>
+                <div className={styles.dropdownMenuScrollable}>
+                  <button
+                    type="button"
+                    className={`${styles.dropdownOption} ${filterFilm === "" ? styles.dropdownOptionActive : ""}`}
+                    onClick={() => { setFilterFilm(""); setIsFilterFilmOpen(false); }}
+                  >
+                    <div className={styles.optionTitle}>Semua Film</div>
+                    {filterFilm === "" && <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>}
+                  </button>
+                  {films.map((film) => (
+                    <button
+                      key={film.id}
+                      type="button"
+                      className={`${styles.dropdownOption} ${filterFilm === film.id.toString() ? styles.dropdownOptionActive : ""}`}
+                      onClick={() => { setFilterFilm(film.id.toString()); setIsFilterFilmOpen(false); }}
+                    >
+                      <div className={styles.optionTitle}>{film.judul}</div>
+                      {filterFilm === film.id.toString() && <svg className={styles.checkIcon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12" /></svg>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Error Message */}

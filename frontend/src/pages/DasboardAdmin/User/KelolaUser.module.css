@@ -156,6 +156,86 @@
 }
 
 /* ==========================
+   Filter Section
+========================== */
+
+.filterSection {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.searchBox {
+  flex: 1;
+  min-width: 250px;
+  position: relative;
+}
+
+.searchInput {
+  width: 100%;
+  background: var(--card);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px 14px 40px;
+  font-size: 14px;
+  transition: 0.25s;
+}
+
+.searchInput:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.searchInput:focus {
+  border-color: var(--accent);
+  background: rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 4px rgba(255, 30, 66, 0.12);
+  outline: none;
+  color: black;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.customFilterDropdown {
+  position: relative;
+  min-width: 220px;
+}
+
+.customFilterDropdown .dropdownTrigger {
+  background: var(--card);
+}
+
+.customFilterDropdown .dropdownTrigger:hover {
+  background: var(--card);
+}
+
+.customFilterDropdown .dropdownTriggerOpen {
+  background: var(--card);
+}
+
+@media (max-width: 1024px) {
+  .filterSection {
+    flex-direction: column;
+  }
+
+  .searchBox {
+    min-width: 100%;
+  }
+
+  .selectFilter {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* ==========================
    Table
 ========================== */
 
@@ -361,6 +441,185 @@ select.modalInput {
   cursor: pointer;
 }
 
+select.modalInput option {
+  color: black;
+}
+
+.passwordToggleBtn {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: #8c7e81;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 4px;
+}
+
+.passwordToggleBtn:hover {
+  color: #ff7a9c;
+}
+
+/* ==========================
+   Custom Role Dropdown
+========================== */
+
+.customDropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdownTrigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+  backdrop-filter: blur(8px);
+}
+
+.dropdownTrigger:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.dropdownTriggerOpen {
+  border-color: #ff1e42;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px rgba(255, 30, 66, 0.12);
+}
+
+.dropdownSelected {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.chevron {
+  width: 18px;
+  height: 18px;
+  color: #b4b4b4;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+  color: #ff1e42;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  width: 100%;
+  background: rgba(18, 2, 4, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 6px;
+  z-index: 1000;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 30, 66, 0.08);
+  animation: dropdownFadeIn 0.18s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdownOption {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #d1d5db;
+  text-align: left;
+  transition: all 0.18s ease;
+  font-size: 14px;
+}
+
+.dropdownOption:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+}
+
+.dropdownOptionActive {
+  background: rgba(255, 30, 66, 0.1);
+  color: white;
+}
+
+.dropdownOptionActive:hover {
+  background: rgba(255, 30, 66, 0.15);
+}
+
+.optionTitle {
+  font-weight: 600;
+  font-size: 14px;
+  color: inherit;
+  line-height: 1.3;
+}
+
+.optionDesc {
+  font-size: 12px;
+  color: #777;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.dropdownOptionActive .optionDesc {
+  color: rgba(255, 100, 120, 0.8);
+}
+
+.roleIconUser {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.roleIconAdmin {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.checkIcon {
+  width: 16px;
+  height: 16px;
+  color: #ff1e42;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 4px 8px;
+}
 /* ==========================
    Footer Button
 ========================== */
