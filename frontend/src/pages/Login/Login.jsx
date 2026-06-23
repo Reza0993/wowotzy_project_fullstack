@@ -1,6 +1,7 @@
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaExclamationCircle } from "react-icons/fa";
 import API from "../../services/api"; // pastikan kamu punya file api.js untuk axios instance
 
 function Login() {
@@ -13,6 +14,7 @@ function Login() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setForm({
@@ -24,6 +26,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
       const res = await API.post("/api/auth/login", form);
@@ -53,6 +56,7 @@ function Login() {
   return (
     <div className="cinema-login-page">
       <div className="cinema-overlay"></div>
+      <div className="cinema-background-glow"></div>
 
       <button className="cinema-back-btn" onClick={() => navigate("/")}>
         ← Kembali
@@ -69,8 +73,8 @@ function Login() {
             {/* EMAIL */}
             <div className="cinema-input-group">
               <label>Email Address</label>
-              <div className="cinema-input">
-                <span>✉</span>
+              <div className="cinema-input-wrapper">
+                <FaEnvelope className="cinema-input-icon" />
                 <input
                   type="email"
                   name="email"
@@ -86,28 +90,34 @@ function Login() {
             <div className="cinema-input-group">
               <div className="password-top">
                 <label>Password</label>
-                <a href="#">Forgot Password?</a>
+                <a href="#" className="forgot-password">Forgot Password?</a>
               </div>
-              <div className="cinema-input">
-                <span>🔒</span>
+              <div className="cinema-input-wrapper">
+                <FaLock className="cinema-input-icon" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   placeholder="••••••••"
                   value={form.password}
                   onChange={handleChange}
                   required
                 />
+                <button
+                  type="button"
+                  className="password-toggle-btn"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
             </div>
 
             {/* ERROR */}
             {error && (
-              <div
-                className="cinema-error"
-                style={{ color: "var(--danger, #e74c3c)", marginBottom: 12 }}
-              >
-                {error}
+              <div className="cinema-error-box">
+                <FaExclamationCircle className="error-icon" />
+                <span>{error}</span>
               </div>
             )}
 
@@ -118,7 +128,11 @@ function Login() {
               disabled={loading}
               aria-busy={loading}
             >
-              {loading ? "Logging in..." : "Login →"}
+              {loading ? (
+                <div className="login-spinner"></div>
+              ) : (
+                "Login →"
+              )}
             </button>
           </form>
 

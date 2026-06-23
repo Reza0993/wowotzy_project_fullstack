@@ -1,114 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 .cinema-login-page {
   width: 100%;
   min-height: 100vh;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   position: relative;
   overflow: hidden;
-
-  background: linear-gradient(to right, #090909, #1a0008);
+  background: radial-gradient(circle at 50% 50%, #150005 0%, #090909 100%);
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 /* OVERLAY */
 .cinema-overlay {
   position: absolute;
-
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-
   background: radial-gradient(
-    circle at top,
-    rgba(255, 0, 85, 0.12),
-    transparent 45%
+    circle at top right,
+    rgba(255, 0, 85, 0.1),
+    transparent 50%
+  ), radial-gradient(
+    circle at bottom left,
+    rgba(255, 0, 85, 0.05),
+    transparent 50%
   );
+  z-index: 1;
+}
+
+/* BACKGROUND GLOW SHAPE */
+.cinema-background-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 23, 68, 0.08) 0%, rgba(255, 23, 68, 0) 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+  animation: pulse-glow 8s ease-in-out infinite alternate;
+}
+
+@keyframes pulse-glow {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 1;
+  }
 }
 
 /* BACK BUTTON */
 .cinema-back-btn {
   position: absolute;
-
-  top: 20px;
-  left: 20px;
-
-  padding: 10px 16px;
-
-  border: none;
-  border-radius: 12px;
-
-  background: rgba(255, 255, 255, 0.08);
-
-  color: white;
-
+  top: 30px;
+  left: 30px;
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
   font-size: 14px;
-
+  font-weight: 500;
   cursor: pointer;
-
   z-index: 10;
-
-  transition: 0.3s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .cinema-back-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 23, 68, 0.4);
+  transform: translateX(-3px);
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.2);
 }
 
 /* CONTAINER */
 .cinema-container {
   position: relative;
   z-index: 2;
-
-  text-align: center;
+  width: 100%;
+  max-width: 440px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* LOGO */
+.cinema-logo {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
 .cinema-logo h1 {
-  color: #ffb3c1;
-
-  font-size: 72px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 48px;
   font-weight: 800;
-
-  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, #ffffff 30%, #ff7a9c 70%, #ff1744 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 0 15px rgba(255, 23, 68, 0.15));
 }
 
 .cinema-logo p {
-  color: #bdbdbd;
-
-  margin-bottom: 30px;
-
-  font-size: 16px;
+  color: #a39598;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 /* CARD */
 .cinema-card {
-  width: 420px;
-
-  padding: 35px;
-
-  border-radius: 18px;
-
-  background: rgba(15, 0, 8, 0.95);
-
-  box-shadow: 0 0 30px rgba(255, 0, 85, 0.08);
+  width: 100%;
+  padding: 40px 35px;
+  border-radius: 24px;
+  background: rgba(20, 12, 15, 0.65);
+  backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 40px rgba(255, 23, 68, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* INPUT GROUP */
 .cinema-input-group {
   text-align: left;
-
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .cinema-input-group label {
   display: block;
-
   margin-bottom: 8px;
-
-  color: white;
-  font-size: 14px;
+  color: #e5e0e2;
+  font-size: 13px;
   font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* PASSWORD TOP */
@@ -116,97 +155,247 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   margin-bottom: 8px;
 }
 
-.password-top a {
-  color: #ff7a9c;
-
-  text-decoration: none;
-
-  font-size: 12px;
+.password-top label {
+  margin-bottom: 0;
 }
 
-/* INPUT */
-.cinema-input {
+.password-top a.forgot-password {
+  color: #ff7a9c;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.password-top a.forgot-password:hover {
+  color: #ff1744;
+  text-decoration: underline;
+}
+
+/* INPUT WRAPPER */
+.cinema-input-wrapper {
   display: flex;
   align-items: center;
-
-  background: #eadde1;
-
-  border-radius: 12px;
-
-  padding: 0 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 0 16px;
+  height: 52px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
-.cinema-input span {
-  color: #999;
-  font-size: 14px;
+.cinema-input-wrapper:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.15);
 }
 
-.cinema-input input {
+.cinema-input-wrapper:focus-within {
+  border-color: #ff1744;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 15px rgba(255, 23, 68, 0.25);
+}
+
+.cinema-input-icon {
+  color: #8c7e81;
+  font-size: 16px;
+  margin-right: 12px;
+  transition: color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.cinema-input-wrapper:focus-within .cinema-input-icon {
+  color: #ff1744;
+}
+
+.cinema-input-wrapper input {
   width: 100%;
-  color: black;
-
-  padding: 15px 12px;
-
+  color: #ffffff;
   border: none;
   outline: none;
-
   background: transparent;
-
   font-size: 14px;
+  font-weight: 400;
+  height: 100%;
 }
 
-/* BUTTON */
+.cinema-input-wrapper input::placeholder {
+  color: #706567;
+  font-weight: 300;
+}
+
+/* PASSWORD TOGGLE BUTTON */
+.password-toggle-btn {
+  background: none;
+  border: none;
+  color: #8c7e81;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  font-size: 16px;
+  transition: color 0.2s ease;
+  z-index: 2;
+  margin-left: 8px;
+}
+
+.password-toggle-btn:hover {
+  color: #ff7a9c;
+}
+
+/* CHROME AUTOFILL REMOVAL */
+.cinema-input-wrapper input:-webkit-autofill,
+.cinema-input-wrapper input:-webkit-autofill:hover,
+.cinema-input-wrapper input:-webkit-autofill:focus,
+.cinema-input-wrapper input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px #1a1214 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ERROR BOX */
+.cinema-error-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.25);
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #ff6b6b;
+  font-size: 13px;
+  margin-bottom: 20px;
+  text-align: left;
+  line-height: 1.4;
+  animation: slide-in 0.3s ease;
+}
+
+.error-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* LOGIN BUTTON */
 .cinema-login-btn {
   width: 100%;
-
+  height: 52px;
   margin-top: 10px;
-
-  padding: 15px;
-
   border: none;
-  border-radius: 12px;
-
-  background: linear-gradient(to right, #ff1744, #ff0055);
-
+  border-radius: 14px;
+  background: linear-gradient(90deg, #ff1744 0%, #ff0055 100%);
   color: white;
-
   font-size: 16px;
-  font-weight: bold;
-
+  font-weight: 700;
   cursor: pointer;
-
-  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 20px rgba(255, 23, 68, 0.25);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cinema-login-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(255, 23, 68, 0.4);
+  background: linear-gradient(90deg, #ff335c 0%, #ff1f6d 100%);
+}
 
-  box-shadow: 0 10px 20px rgba(255, 0, 85, 0.2);
+.cinema-login-btn:active {
+  transform: translateY(0);
+}
+
+.cinema-login-btn:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+  box-shadow: none;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* SPINNER */
+.login-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  border-top: 3px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* LINE */
 .cinema-line {
   width: 100%;
   height: 1px;
-
-  background: rgba(255, 255, 255, 0.1);
-
-  margin: 25px 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08) 50%, transparent);
+  margin: 30px 0;
 }
 
 /* FOOTER */
 .cinema-footer {
-  color: #bdbdbd;
-  font-size: 14px;
+  color: #a39598;
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .cinema-footer a {
   color: #ff7a9c;
-
   text-decoration: none;
   font-weight: 600;
+  margin-left: 5px;
+  transition: color 0.2s ease;
+}
+
+.cinema-footer a:hover {
+  color: #ff1744;
+  text-decoration: underline;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 480px) {
+  .cinema-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+  
+  .cinema-card {
+    padding: 30px 20px;
+    border-radius: 20px;
+  }
+
+  .cinema-logo h1 {
+    font-size: 38px;
+  }
+
+  .cinema-back-btn {
+    top: 15px;
+    left: 15px;
+    padding: 8px 15px;
+    font-size: 12px;
+  }
 }
